@@ -1,0 +1,1 @@
+/Users/macbook/Mandiri-Academy/Kotlin-Android/challenge/GoldMarket/buildSrc/build/classes/kotlin/main/AppConfig.class:/Users/macbook/Mandiri-Academy/Kotlin-Android/challenge/GoldMarket/buildSrc/build/classes/kotlin/main/AppDependencies.class:/Users/macbook/Mandiri-Academy/Kotlin-Android/challenge/GoldMarket/buildSrc/build/classes/kotlin/main/Version.class
