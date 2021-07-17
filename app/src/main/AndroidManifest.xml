@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_gold_market_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoldMarket">
+        <activity android:name=".activity.LoginActivity"></activity>
         <activity android:name=".activity.WelcomeActivity" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
