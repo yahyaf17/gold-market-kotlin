@@ -3,8 +3,9 @@ package com.mandiri.goldmarket.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.utils.ButtonUtils
 import kotlinx.android.synthetic.main.activity_login.*
@@ -19,6 +20,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         this.toggleOn = false
+        btnLogin.isEnabled = false
+        val textEdits = listOf(textLoginUsername, textLoginPassword)
+
+        disableLoginBtn(textEdits)
 
         textToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
@@ -27,6 +32,24 @@ class LoginActivity : AppCompatActivity() {
         showPassLogin.setOnClickListener {
             this.toggleOn = !this.toggleOn
             ButtonUtils.showPasswordUtils(this.toggleOn, textLoginPassword, showPassLogin)
+        }
+
+    }
+
+    private fun disableLoginBtn(list: List<EditText>) {
+        for (l in list) {
+            l.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    btnLogin.isEnabled =
+                        (textLoginUsername.length() > 0 && textLoginPassword.length() >= 5)
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                }
+            })
         }
     }
 }
