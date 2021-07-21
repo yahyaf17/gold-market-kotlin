@@ -178,14 +178,14 @@
       android:fontFamily="@font/asap_bold"
       android:hint="@string/email"
       android:inputType="textEmailAddress"
-      app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+      app:layout_constraintBottom_toTopOf="@+id/textRegisterPassword"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textUsernameRegister" />
 
   <EditText
-      android:id="@+id/editTextTextPassword"
+      android:id="@+id/textRegisterPassword"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="24dp"
@@ -201,5 +201,17 @@
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/textEmail" />
+
+  <ImageButton
+      android:id="@+id/showPassRegister"
+      android:layout_width="28dp"
+      android:layout_height="27dp"
+      android:layout_marginTop="2dp"
+      android:layout_marginEnd="8dp"
+      android:backgroundTint="#00FFFFFF"
+      app:layout_constraintBottom_toBottomOf="@+id/textRegisterPassword"
+      app:layout_constraintEnd_toEndOf="@+id/textRegisterPassword"
+      app:layout_constraintTop_toTopOf="@+id/textRegisterPassword"
+      app:srcCompat="@drawable/ic_password_hidden" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
