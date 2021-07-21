@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Gold Market</string>
+    <string name="get_started">Get Started</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="login">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="toc">Terms and Conditions</string>
+    <string name="welcome">WELCOME</string>
+    <string name="welcome_greet">Invest your assets to gold!</string>
+    <string name="forgot_pass">Forgot Password?</string>
+    <string name="dont_have_account">Don\'t Have Account?</string>
+    <string name="register_with_us">Register with us!</string>
+    <string name="already_have_acc">Already have an account?</string>
+    <string name="go_sign_in">Go sign in!</string>
+    <string name="go_create_acc">Let’s create your account!</string>
 </resources>

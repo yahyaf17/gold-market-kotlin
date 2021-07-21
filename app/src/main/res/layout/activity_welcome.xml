@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/welcomeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
@@ -36,8 +36,7 @@
         android:layout_marginBottom="24dp"
         android:height="60dp"
         android:fontFamily="@font/asap_bold"
-        android:text="Get Started"
-        android:textColor="@color/gm_dark_grey"
+        android:text="@string/get_started"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,12 +50,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/asap_bold"
-        android:text="WELCOME"
+        android:text="@string/welcome"
         android:textColor="@color/gm_dark_grey"
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        app:layout_constraintTop_toBottomOf="@+id/welcomeImage" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -74,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/asap"
-        android:text="Invest your assets to gold!"
+        android:text="@string/welcome_greet"
         android:textColor="@color/gm_dark_grey"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

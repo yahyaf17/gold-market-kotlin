@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.activity
+package com.mandiri.goldmarket.welcome
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import com.mandiri.goldmarket.R
+import com.mandiri.goldmarket.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 class WelcomeActivity : AppCompatActivity() {

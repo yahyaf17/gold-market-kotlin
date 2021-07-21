@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gm_primary">#FFA45B</color>
+    <color name="gm_primary_light">#FFB74D</color>
+    <color name="gm_primary_dark">#FF9800</color>
     <color name="gm_secondary">#FFDA77</color>
     <color name="gm_white">#FBF6F0</color>
     <color name="gm_light_blue">#AEE6E6</color>

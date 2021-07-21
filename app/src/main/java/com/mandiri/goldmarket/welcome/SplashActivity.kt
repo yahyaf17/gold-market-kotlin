@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.activity
+package com.mandiri.goldmarket.welcome
 
 import android.content.Intent
 import android.os.Bundle
