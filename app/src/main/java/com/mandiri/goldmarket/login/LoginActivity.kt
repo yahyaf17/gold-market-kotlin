@@ -1,12 +1,14 @@
 package com.mandiri.goldmarket.login
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import com.mandiri.goldmarket.R
+import com.mandiri.goldmarket.maintab.MainTabActivity
 import com.mandiri.goldmarket.utils.ButtonUtils
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlin.properties.Delegates
@@ -17,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_login)
 
         this.toggleOn = false
@@ -32,6 +35,12 @@ class LoginActivity : AppCompatActivity() {
         showPassLogin.setOnClickListener {
             this.toggleOn = !this.toggleOn
             ButtonUtils.showPasswordUtils(this.toggleOn, textLoginPassword, showPassLogin)
+        }
+
+        btnLogin.setOnClickListener {
+//            if (textLoginUsername.text.toString() == "tes" && textLoginPassword.text.toString() == "enigma") {
+                startActivity(Intent(this, MainTabActivity::class.java))
+//            }
         }
 
     }
