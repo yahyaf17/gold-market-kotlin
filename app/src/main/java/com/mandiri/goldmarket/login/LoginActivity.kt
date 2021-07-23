@@ -38,9 +38,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnLogin.setOnClickListener {
-//            if (textLoginUsername.text.toString() == "tes" && textLoginPassword.text.toString() == "enigma") {
+            if (textLoginUsername.text.toString() == "tes" && textLoginPassword.text.toString() == "enigma") {
                 startActivity(Intent(this, MainTabActivity::class.java))
-//            }
+            }
         }
 
     }
