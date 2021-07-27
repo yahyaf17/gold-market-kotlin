@@ -6,4 +6,7 @@ object Version {
     const val constraintLayout = "1.1.3"
     const val extJunitVersion = "1.1.3"
     const val espressoCore = "3.4.0"
+    const val navFragment = "2.3.5"
+    const val navUi = "2.3.5"
+    const val legacySupport = "4:1.0.0"
 }

@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.welcome
+package com.mandiri.goldmarket.splash
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.mandiri.goldmarket.R
+import com.mandiri.goldmarket.onboarding.OnboardingActivity
 
 
 class SplashActivity : AppCompatActivity() {
@@ -15,8 +16,8 @@ class SplashActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_splash)
 
-        Handler(Looper.getMainLooper())?.postDelayed({
-            val intent = Intent(this@SplashActivity, WelcomeActivity::class.java)
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this@SplashActivity, OnboardingActivity::class.java)
             startActivity(intent)
             finish()
         }, 2000)

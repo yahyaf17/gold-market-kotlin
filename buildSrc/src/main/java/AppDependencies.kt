@@ -7,6 +7,9 @@ object AppDependencies {
     private const val jUnit = "junit:junit:4.+"
     private const val extJunitVersion = "androidx.test.ext:junit:${Version.extJunitVersion}"
     private const val espressoCore = "androidx.test.espresso:espresso-core:${Version.espressoCore}"
+    private const val navFragment = "androidx.navigation:navigation-fragment-ktx:${Version.navFragment}"
+    private const val navUi = "androidx.navigation:navigation-ui-ktx:${Version.navUi}"
+    private const val legacySupport = "androidx.legacy:legacy-support-v${Version.legacySupport}"
 
     val dependencies: Map<String, List<String>> = mapOf(
         "implementation" to listOf(
@@ -14,7 +17,10 @@ object AppDependencies {
             kotlinCore,
             appCompat,
             materialDesign,
-            constraintLayout
+            constraintLayout,
+            navFragment,
+            navUi,
+            legacySupport
         ),
         "testImplementation" to listOf(
             jUnit

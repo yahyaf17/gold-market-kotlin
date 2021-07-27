@@ -26,4 +26,8 @@
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
     <string name="current_pocket">Current Pocket</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="email_address">myemail@mail.com</string>
+    <string name="pocket">Pocket</string>
+    <string name="balance">Balance</string>
 </resources>

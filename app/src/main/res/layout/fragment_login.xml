@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.LoginActivity"
-    android:background="@color/gm_white">
+    tools:context=".onboarding.LoginFragment">
 
     <View
         android:id="@+id/background"
@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+        <ImageView
         android:id="@+id/loginImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background" />
 
-    <EditText
+        <EditText
         android:id="@+id/textLoginUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewWelcome"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <EditText
+        <EditText
         android:id="@+id/textLoginPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLoginUsername" />
 
-    <TextView
+        <TextView
         android:id="@+id/textViewWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginImage" />
 
-    <Button
+        <Button
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+        <TextView
         android:id="@+id/textForgotPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLoginPassword" />
 
-    <TextView
+        <TextView
         android:id="@+id/textHaveAcc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+        <TextView
         android:id="@+id/textToRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textHaveAcc" />
 
-    <TextView
+        <TextView
         android:id="@+id/textLoginMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
 
-    <ImageButton
+        <ImageButton
         android:id="@+id/showPassLogin"
         android:layout_width="28dp"
         android:layout_height="27dp"
@@ -172,5 +172,4 @@
         app:layout_constraintEnd_toEndOf="@+id/textLoginPassword"
         app:layout_constraintTop_toTopOf="@+id/textLoginPassword"
         app:srcCompat="@drawable/ic_password_hidden" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
