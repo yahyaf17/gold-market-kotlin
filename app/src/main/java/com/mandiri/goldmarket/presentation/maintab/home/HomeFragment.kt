@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mandiri.goldmarket.data.model.Customer
+import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
@@ -33,6 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var customerUsername: String
     private lateinit var customerSelected: Customer
+    private lateinit var pocketSelected: Pocket
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return HomeViewModel(CustomerRepositoryImpl(), PocketRepositoryImpl()) as T
@@ -60,8 +62,10 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getCustomer(customerUsername)
         viewModel.getBalanceInfo()
+        viewModel.getCurrentPocket("Grasberg")
         subscriber()
         customerSelected = viewModel.findCustomerByUsername(customerUsername)!!
+        pocketSelected = viewModel.findPocketByName("Grasberg")!!
         binding.apply {
             btnCreatePocket.setOnClickListener {
                 NewPocketDialog.newInstance().show(childFragmentManager, NewPocketDialog.TAG)
@@ -83,6 +87,20 @@ class HomeFragment : Fragment() {
                     else -> EventResult.Idle
                 }
             }
+            val pocketObserver: Observer<EventResult> = Observer<EventResult> { events ->
+                when(events) {
+                    is EventResult.Loading -> showProgressBar()
+                    is EventResult.Success -> {
+                        hideProgressBar()
+                        pocketSelected = viewModel.findPocketByName("Grasberg")!!
+                        textPocketQty.text = "Amount: ${pocketSelected.amount} gram"
+                        textPocketTitle.text = pocketSelected.name
+                        textPocketAmount.text = Formatter.rupiahFormatter(pocketSelected.totalPrice)
+                    }
+                    is EventResult.ErrorMessage -> hideProgressBar()
+                    else -> EventResult.Idle
+                }
+            }
             val balanceObserver: Observer<EventResult> = Observer<EventResult> { events ->
                 when(events) {
                     is EventResult.Loading -> showProgressBar()
@@ -96,6 +114,7 @@ class HomeFragment : Fragment() {
             }
             viewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
             viewModel.totalBalanceLiveData.observe(viewLifecycleOwner, balanceObserver)
+            viewModel.pocketSelectedLiveData.observe(viewLifecycleOwner, pocketObserver)
         }
     }
 
