@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gm_white"
-    tools:context=".maintab.ProfileFragment">
+    tools:context=".presentation.maintab.profile.ProfileFragment">
 
 
     <View
@@ -23,7 +23,7 @@
         android:id="@+id/textEmailProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/email_address"
+        android:text=""
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/asap_bold"
-        android:text="Yahya Faikar"
+        android:text=""
         android:textColor="@color/gm_dark_grey"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/textEmailProfile"
@@ -102,7 +102,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/balance"
+            android:id="@+id/totalBalance"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -116,6 +116,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="15dp"
         android:orientation="horizontal"
@@ -127,22 +128,32 @@
             android:id="@+id/pocket"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/asap"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="@string/pocket" />
+            android:fontFamily="@font/asap"
+            android:text="@string/pocket"
+            android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/totalBalance"
+            android:id="@+id/balance"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/asap"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="@string/balance" />
+            android:fontFamily="@font/asap"
+            android:text="@string/balance"
+            android:textAlignment="center" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/profile_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,6 @@
     <string name="already_have_acc">Already have an account?</string>
     <string name="go_sign_in">Go sign in!</string>
     <string name="go_create_acc">Let’s create your account!</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile">Profile</string>
     <string name="history">History</string>
@@ -30,4 +29,8 @@
     <string name="email_address">myemail@mail.com</string>
     <string name="pocket">Pocket</string>
     <string name="balance">Balance</string>
+    <string name="edit_customer">Edit Customer</string>
+    <string name="new_pocket">New Pocket</string>
+    <string name="pocket_name">Pocket Name</string>
+    <string name="welcome_home">Welcome,</string>
 </resources>

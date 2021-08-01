@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.splash
+package com.mandiri.goldmarket.presentation.splash
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.os.Looper
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.onboarding.OnboardingActivity
+import com.mandiri.goldmarket.presentation.onboarding.onboard.OnboardingActivity
 
 
 class SplashActivity : AppCompatActivity() {

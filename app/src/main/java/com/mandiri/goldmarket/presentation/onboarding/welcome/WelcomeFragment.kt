@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.onboarding
+package com.mandiri.goldmarket.presentation.onboarding.welcome
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

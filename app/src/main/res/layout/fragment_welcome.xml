@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gm_white"
-    tools:context=".onboarding.WelcomeFragment">
+    tools:context=".presentation.onboarding.welcome.WelcomeFragment">
 
     <View
         android:id="@+id/background"

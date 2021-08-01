@@ -5,7 +5,7 @@
     android:id="@+id/container_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".onboarding.RegisterFragment" >
+    tools:context=".presentation.onboarding.register.RegisterFragment" >
 
     <View
         android:id="@+id/background"

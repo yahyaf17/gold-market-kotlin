@@ -9,3 +9,13 @@ To Login, please enter :
 
     - username: tes
     - password: enigma
+
+or register    
+
+### Added Feature
+
+    - Register with validation
+    - Loading animation
+    - History and empty data handling
+    - Edit profile
+    - Create pocket

@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.mandiri.goldmarket.maintab.HistoryFragment"
+        android:name="com.mandiri.goldmarket.presentation.maintab.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.mandiri.goldmarket.maintab.HomeFragment"
+        android:name="com.mandiri.goldmarket.presentation.maintab.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.mandiri.goldmarket.maintab.ProfileFragment"
+        android:name="com.mandiri.goldmarket.presentation.maintab.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -25,10 +25,20 @@
             app:destination="@id/onboardingActivity"
             app:popUpTo="@id/onboardingActivity"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileDialog"
+            app:destination="@id/editProfileDialog"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@id/editProfileDialog" />
     </fragment>
     <activity
         android:id="@+id/onboardingActivity"
-        android:name="com.mandiri.goldmarket.onboarding.OnboardingActivity"
+        android:name="com.mandiri.goldmarket.presentation.onboarding.onboard.OnboardingActivity"
         android:label="activity_onboarding"
         tools:layout="@layout/activity_onboarding" />
+    <fragment
+        android:id="@+id/editProfileDialog"
+        android:name="com.mandiri.goldmarket.presentation.maintab.profile.EditProfileDialog"
+        android:label="EditProfileDialog" />
 </navigation>

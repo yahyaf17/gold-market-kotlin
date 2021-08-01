@@ -1,10 +1,10 @@
-package com.mandiri.goldmarket.onboarding
+package com.mandiri.goldmarket.presentation.onboarding.onboard
 
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.databinding.ActivityOnboardingBinding
+
 
 class OnboardingActivity : AppCompatActivity() {
 
