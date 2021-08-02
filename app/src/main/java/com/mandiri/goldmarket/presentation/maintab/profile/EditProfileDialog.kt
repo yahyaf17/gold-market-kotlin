@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.model.Customer
-import com.mandiri.goldmarket.presentation.viewmodel.CustomerViewModel
 
 class EditProfileDialog: DialogFragment() {
 
@@ -19,7 +18,7 @@ class EditProfileDialog: DialogFragment() {
     private lateinit var firstNameView: EditText
     private lateinit var lastNameView: EditText
     private val viewModel by lazy {
-        requireParentFragment().viewModels<CustomerViewModel>()
+        requireParentFragment().viewModels<ProfileViewModel>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +52,7 @@ class EditProfileDialog: DialogFragment() {
                                 customer.password
                             )
                         )
-                        viewModel.value.getCustomer(customer.username)
+                        viewModel.value.getCustomerInfo(customer.username)
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { dialog, id ->

@@ -33,7 +33,7 @@ class NewPocketDialog: DialogFragment() {
                 .setPositiveButton("Create",
                     DialogInterface.OnClickListener { dialog, id ->
                         viewModelPocket.createNewPocket(pocketNameText.text.toString())
-//                        viewModel.value.get(customer.username)
+//                        viewModel.value.(customer.username)
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { dialog, id ->

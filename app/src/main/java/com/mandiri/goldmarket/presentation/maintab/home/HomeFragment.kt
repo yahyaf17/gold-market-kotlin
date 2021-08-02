@@ -17,16 +17,12 @@ import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
-import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
 import com.mandiri.goldmarket.presentation.maintab.pocket.NewPocketDialog
-import com.mandiri.goldmarket.presentation.maintab.pocket.PocketViewModel
-import com.mandiri.goldmarket.presentation.viewmodel.CustomerViewModel
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.CustomSharedPreferences.Username
 import com.mandiri.goldmarket.utils.EventResult
 import com.mandiri.goldmarket.utils.Formatter
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 
 class HomeFragment : Fragment() {
 

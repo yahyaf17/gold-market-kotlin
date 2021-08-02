@@ -1,6 +1,5 @@
 package com.mandiri.goldmarket.presentation.onboarding.login
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -22,7 +21,6 @@ import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
 import com.mandiri.goldmarket.databinding.FragmentLoginBinding
 import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
 import com.mandiri.goldmarket.presentation.onboarding.onboard.OnboardingActivity
-import com.mandiri.goldmarket.presentation.viewmodel.CustomerViewModel
 import com.mandiri.goldmarket.utils.ButtonUtils
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.CustomSharedPreferences.Username
@@ -34,10 +32,10 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CustomerViewModel(CustomerRepositoryImpl()) as T
+            return LoginViewModel(CustomerRepositoryImpl()) as T
         }
     }
-    private val viewModel: CustomerViewModel by viewModels { factory }
+    private val viewModel: LoginViewModel by viewModels { factory }
     var toggleOn by Delegates.notNull<Boolean>()
     lateinit var sharedPref: SharedPreferences
 
@@ -73,12 +71,7 @@ class LoginFragment : Fragment() {
                     textLoginPassword.text.toString()
                 )
                 customerSelected?.let {
-                    val thisActivity = (activity as OnboardingActivity)
-                    val intent = Intent(thisActivity, MainTabActivity::class.java)
-                    intent.putExtra(CUSTOMER_USERNAME, textLoginUsername.text.toString())
-                    sharedPref.Username = textLoginUsername.text.toString()
-                    startActivity(intent)
-                    thisActivity.finish()
+                    moveToHome()
                 } ?: Toast.makeText(this.context, "Wrong password or account not registered", Toast.LENGTH_LONG).show()
             }
 
@@ -112,12 +105,15 @@ class LoginFragment : Fragment() {
         ButtonUtils.showPasswordUtils(this.toggleOn, textLoginPassword, showPassLogin)
     }
 
-    private fun showProgressBar() {
-//        history_loading.visibility = View.VISIBLE
+    private fun moveToHome() {
+        val thisActivity = (activity as OnboardingActivity)
+        val intent = Intent(thisActivity, MainTabActivity::class.java)
+        sharedPref.Username = textLoginUsername.text.toString()
+        startActivity(intent)
+        thisActivity.finish()
     }
 
     companion object {
-        const val CUSTOMER_USERNAME = "username"
         @JvmStatic
         fun newInstance() = LoginFragment()
     }
