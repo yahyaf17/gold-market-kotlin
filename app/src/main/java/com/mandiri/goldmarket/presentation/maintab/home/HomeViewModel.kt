@@ -17,7 +17,8 @@ class HomeViewModel(private val customerRepo: CustomerRepositoryImpl, private va
 
     private var _customerLiveData = MutableLiveData<EventResult>(EventResult.Idle)
     private var _totalBalanceLiveData = MutableLiveData<EventResult>(EventResult.Idle)
-    private var _pocketSelected = MutableLiveData<EventResult>(EventResult.Idle)
+    private var _pocketSelectedLiveData = MutableLiveData<EventResult>(EventResult.Idle)
+    private var _pocketsLiveData = MutableLiveData<EventResult>(EventResult.Idle)
 
     val customerLiveData: LiveData<EventResult>
         get() = _customerLiveData
@@ -26,18 +27,25 @@ class HomeViewModel(private val customerRepo: CustomerRepositoryImpl, private va
         get() = _totalBalanceLiveData
 
     val pocketSelectedLiveData: LiveData<EventResult>
-        get() = _pocketSelected
+        get() = _pocketSelectedLiveData
 
-    fun findCustomerByUsername(username: String): Customer? {
+    val pocketsLiveData: LiveData<EventResult>
+        get() = _pocketsLiveData
+
+    private fun findCustomerByUsername(username: String): Customer? {
         return customerRepo.findByUsername(username)
     }
 
-    fun findPocketByName(name: String): Pocket? {
+    private fun findPocketByName(name: String): Pocket? {
         return pocketRepo.findById(name)
     }
 
-    fun getPocketTotalBalance(): BigDecimal {
+    private fun getPocketTotalBalance(): BigDecimal {
         return pocketRepo.totalBalanceOfPocket()
+    }
+
+    fun createNewPocket(name: String): Pocket {
+        return pocketRepo.createNewPocket(name, "Gold")
     }
 
     private fun getCustomerInfo(username: String) {
@@ -53,13 +61,13 @@ class HomeViewModel(private val customerRepo: CustomerRepositoryImpl, private va
     }
 
     private fun getPocketSelected(name: String) {
-        _pocketSelected.value = EventResult.Loading
+        _pocketSelectedLiveData.value = EventResult.Loading
         Handler(Looper.getMainLooper()).postDelayed({
             try {
                 val pocketSelected = findPocketByName(name)
-                _pocketSelected.value = EventResult.Success(pocketSelected!!)
+                _pocketSelectedLiveData.value = EventResult.Success(pocketSelected!!)
             } catch (e: Exception) {
-                _pocketSelected.value = EventResult.ErrorMessage("Can't Retrieve Customer Data")
+                _pocketSelectedLiveData.value = EventResult.ErrorMessage("Can't Retrieve Pocket Selected Data")
             }
         }, 1000)
     }
@@ -71,7 +79,19 @@ class HomeViewModel(private val customerRepo: CustomerRepositoryImpl, private va
                 val totalBalance = getPocketTotalBalance()
                 _totalBalanceLiveData.value = EventResult.Success(totalBalance)
             } catch (e: Exception) {
-                _totalBalanceLiveData.value = EventResult.ErrorMessage("Can't Retrieve Customer Data")
+                _totalBalanceLiveData.value = EventResult.ErrorMessage("Can't Retrieve Balance Data")
+            }
+        }, 1000)
+    }
+
+    private fun getAllPockets() {
+        _pocketsLiveData.value = EventResult.Loading
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                val pockets = pocketRepo.findAll()
+                _pocketsLiveData.value = EventResult.Success(pockets)
+            } catch (e: Exception) {
+                _pocketsLiveData.value = EventResult.ErrorMessage("Can't Retrieve Pockets data")
             }
         }, 1000)
     }
@@ -86,6 +106,10 @@ class HomeViewModel(private val customerRepo: CustomerRepositoryImpl, private va
 
     fun getCurrentPocket(name: String) {
         getPocketSelected(name)
+    }
+
+    fun getPockets() {
+        getAllPockets()
     }
 
 }

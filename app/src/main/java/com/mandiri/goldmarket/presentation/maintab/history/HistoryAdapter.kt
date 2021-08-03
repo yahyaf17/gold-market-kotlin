@@ -1,6 +1,5 @@
 package com.mandiri.goldmarket.presentation.maintab.history
 
-import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,7 +7,6 @@ import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.model.History
 import com.mandiri.goldmarket.databinding.HistoryListItemBinding
 import com.mandiri.goldmarket.utils.Formatter
-import java.util.*
 
 class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
@@ -30,10 +28,10 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
                 binding.textDate.text = Formatter.dateFormatter(this.purchaseDate)
                 binding.textAmount.text = "${this.amount} gram"
                 binding.textTotalPrice.text = Formatter.rupiahFormatter(this.totalPrice)
-                if (this.purchaseType.equals("Buy")) {
+                if (this.purchaseType == "Buy") {
                     binding.imageHistory.setImageResource(R.drawable.ic_up_arrow)
                 }
-                if (this.purchaseType.equals("Sell")) {
+                if (this.purchaseType == "Sell") {
                     binding.imageHistory.setImageResource(R.drawable.ic_down_arrow)
                 }
             }
@@ -44,9 +42,9 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
         return histories.size
     }
 
-    fun updateData(customer: List<History>) {
+    fun updateData(history: List<History>) {
         histories.clear()
-        histories.addAll(customer)
+        histories.addAll(history)
         notifyDataSetChanged()
     }
 

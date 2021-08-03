@@ -5,22 +5,23 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.EditText
+import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
+import com.mandiri.goldmarket.presentation.maintab.home.HomeFragment
+import com.mandiri.goldmarket.presentation.maintab.home.HomeViewModel
+import com.mandiri.goldmarket.presentation.maintab.profile.ProfileViewModel
 
 class NewPocketDialog: DialogFragment() {
 
-    private  val factory =  object: ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return PocketViewModel(PocketRepositoryImpl()) as T
-        }
-    }
-    private val viewModelPocket: PocketViewModel by viewModels { factory }
     private lateinit var pocketNameText: EditText
+    private val viewModel by lazy {
+        requireParentFragment().viewModels<HomeViewModel>()
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -32,8 +33,8 @@ class NewPocketDialog: DialogFragment() {
             })
                 .setPositiveButton("Create",
                     DialogInterface.OnClickListener { dialog, id ->
-                        viewModelPocket.createNewPocket(pocketNameText.text.toString())
-//                        viewModel.value.(customer.username)
+                        viewModel.value.createNewPocket(pocketNameText.text.toString())
+                        viewModel.value.getPockets()
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { dialog, id ->

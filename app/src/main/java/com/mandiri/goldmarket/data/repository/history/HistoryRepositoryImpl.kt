@@ -30,7 +30,15 @@ class HistoryRepositoryImpl: HistoryRepository {
                 2.1,
                 BigDecimal(1640000),
                 "Grasberg",
-                Date())
+                Date()),
+            History(
+                "Gold",
+                        "Sell",
+                0.2,
+                BigDecimal(166700),
+                "Grass root",
+                Date()
+            )
         )
     }
 }

@@ -1,9 +1,8 @@
 package com.mandiri.goldmarket.presentation.maintab.home
 
-import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mandiri.goldmarket.data.model.Customer
 import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
@@ -23,6 +23,7 @@ import com.mandiri.goldmarket.utils.CustomSharedPreferences.Username
 import com.mandiri.goldmarket.utils.EventResult
 import com.mandiri.goldmarket.utils.Formatter
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.math.BigDecimal
 
 class HomeFragment : Fragment() {
 
@@ -37,12 +38,14 @@ class HomeFragment : Fragment() {
         }
     }
     private val viewModel: HomeViewModel by viewModels { factory }
+    private lateinit var homePocketAdapter: HomePocketAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPref = CustomSharedPreferences.customPreference(requireContext(), "Credentials")
         customerUsername = sharedPref.Username.toString()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onCreateView(
@@ -59,39 +62,55 @@ class HomeFragment : Fragment() {
         viewModel.getCustomer(customerUsername)
         viewModel.getBalanceInfo()
         viewModel.getCurrentPocket("Grasberg")
+        viewModel.getPockets()
         subscriber()
-        customerSelected = viewModel.findCustomerByUsername(customerUsername)!!
-        pocketSelected = viewModel.findPocketByName("Grasberg")!!
         binding.apply {
             btnCreatePocket.setOnClickListener {
                 NewPocketDialog.newInstance().show(childFragmentManager, NewPocketDialog.TAG)
+            }
+
+            rvPocket.apply {
+                layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = homePocketAdapter
             }
         }
     }
 
     private fun subscriber() {
         binding.apply {
+            homePocketAdapter = HomePocketAdapter()
+            val pocketsObserver: Observer<EventResult> = Observer { events ->
+                when(events) {
+                    is EventResult.Loading -> showProgressBar()
+                    is EventResult.Success -> {
+                        hideProgressBar()
+                        homePocketAdapter.updateData(events.data as List<Pocket>)
+                    }
+                    is EventResult.ErrorMessage -> hideProgressBar()
+                    else -> EventResult.Idle
+                }
+            }
             val customerObserver: Observer<EventResult> = Observer<EventResult> { events ->
                 when(events) {
                     is EventResult.Loading -> showProgressBar()
                     is EventResult.Success -> {
                         hideProgressBar()
-                        customerSelected = viewModel.findCustomerByUsername(customerUsername)!!
+                        customerSelected = events.data as Customer
                         textWelcome.text = "Welcome, ${customerSelected.firstName} ${customerSelected.lastName}!"
                     }
                     is EventResult.ErrorMessage -> hideProgressBar()
                     else -> EventResult.Idle
                 }
             }
-            val pocketObserver: Observer<EventResult> = Observer<EventResult> { events ->
+            val selectedPocketObserver: Observer<EventResult> = Observer<EventResult> { events ->
                 when(events) {
                     is EventResult.Loading -> showProgressBar()
                     is EventResult.Success -> {
-                        hideProgressBar()
-                        pocketSelected = viewModel.findPocketByName("Grasberg")!!
-                        textPocketQty.text = "Amount: ${pocketSelected.amount} gram"
+                        pocketSelected = events.data as Pocket
+                        textPocketQty.text = "${pocketSelected.amount} gram"
                         textPocketTitle.text = pocketSelected.name
                         textPocketAmount.text = Formatter.rupiahFormatter(pocketSelected.totalPrice)
+                        hideProgressBar()
                     }
                     is EventResult.ErrorMessage -> hideProgressBar()
                     else -> EventResult.Idle
@@ -102,15 +121,16 @@ class HomeFragment : Fragment() {
                     is EventResult.Loading -> showProgressBar()
                     is EventResult.Success -> {
                         hideProgressBar()
-                        textTotalBalance.text = Formatter.rupiahFormatter(viewModel.getPocketTotalBalance())
+                        textTotalBalance.text = Formatter.rupiahFormatter(events.data as BigDecimal)
                     }
                     is EventResult.ErrorMessage -> hideProgressBar()
                     else -> EventResult.Idle
                 }
             }
+            viewModel.pocketsLiveData.observe(viewLifecycleOwner, pocketsObserver)
             viewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
             viewModel.totalBalanceLiveData.observe(viewLifecycleOwner, balanceObserver)
-            viewModel.pocketSelectedLiveData.observe(viewLifecycleOwner, pocketObserver)
+            viewModel.pocketSelectedLiveData.observe(viewLifecycleOwner, selectedPocketObserver)
         }
     }
 

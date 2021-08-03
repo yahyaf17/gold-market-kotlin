@@ -5,7 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mandiri.goldmarket.data.model.History
 import com.mandiri.goldmarket.data.repository.history.HistoryRepository
 import com.mandiri.goldmarket.utils.EventResult
 
@@ -18,7 +17,7 @@ class HistoryViewModel(val repository: HistoryRepository): ViewModel() {
 
     private fun getHistoryFromRepo() = repository.findAllHistory()
 
-    private fun updateHistoryData() {
+    private fun updateHistoryObservable() {
         _historyLiveData.value = EventResult.Loading
         Handler(Looper.getMainLooper()).postDelayed({
             try {
@@ -32,6 +31,6 @@ class HistoryViewModel(val repository: HistoryRepository): ViewModel() {
     }
 
     fun getHistories() {
-        updateHistoryData()
+        updateHistoryObservable()
     }
 }

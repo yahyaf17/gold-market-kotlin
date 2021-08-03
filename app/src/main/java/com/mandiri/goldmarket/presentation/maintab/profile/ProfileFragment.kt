@@ -1,6 +1,7 @@
 package com.mandiri.goldmarket.presentation.maintab.profile
 
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,6 +43,7 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedPref = CustomSharedPreferences.customPreference(requireContext(), "Credentials")
         customerUsername = sharedPref.Username.toString()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     override fun onCreateView(
