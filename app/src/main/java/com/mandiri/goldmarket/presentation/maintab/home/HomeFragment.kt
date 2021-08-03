@@ -25,13 +25,14 @@ import com.mandiri.goldmarket.utils.Formatter
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.math.BigDecimal
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
 
     private lateinit var sharedPref: SharedPreferences
     private lateinit var binding: FragmentHomeBinding
     private lateinit var customerUsername: String
     private lateinit var customerSelected: Customer
     private lateinit var pocketSelected: Pocket
+    private lateinit var pockets: List<Pocket>
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return HomeViewModel(CustomerRepositoryImpl(), PocketRepositoryImpl()) as T
@@ -78,13 +79,14 @@ class HomeFragment : Fragment() {
 
     private fun subscriber() {
         binding.apply {
-            homePocketAdapter = HomePocketAdapter()
+            homePocketAdapter = HomePocketAdapter(this@HomeFragment)
             val pocketsObserver: Observer<EventResult> = Observer { events ->
                 when(events) {
                     is EventResult.Loading -> showProgressBar()
                     is EventResult.Success -> {
                         hideProgressBar()
-                        homePocketAdapter.updateData(events.data as List<Pocket>)
+                        pockets = events.data as List<Pocket>
+                        homePocketAdapter.updateData(pockets)
                     }
                     is EventResult.ErrorMessage -> hideProgressBar()
                     else -> EventResult.Idle
@@ -140,5 +142,9 @@ class HomeFragment : Fragment() {
 
     private fun hideProgressBar() {
         home_progressbar.visibility = View.GONE
+    }
+
+    override fun onChangePocket(position: Int) {
+        viewModel.getCurrentPocket(pockets[position].name)
     }
 }

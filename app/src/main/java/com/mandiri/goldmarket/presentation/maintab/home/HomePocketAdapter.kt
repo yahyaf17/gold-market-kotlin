@@ -7,7 +7,7 @@ import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.databinding.PocketListItemBinding
 import com.mandiri.goldmarket.utils.Formatter
 
-class HomePocketAdapter: RecyclerView.Adapter<HomePocketAdapter.HomePocketViewHolder>() {
+class HomePocketAdapter(private val onClickListener: OnClickItem): RecyclerView.Adapter<HomePocketAdapter.HomePocketViewHolder>() {
 
     private var pockets = mutableListOf<Pocket>()
 
@@ -25,6 +25,9 @@ class HomePocketAdapter: RecyclerView.Adapter<HomePocketAdapter.HomePocketViewHo
                 binding.textProductType.text = this.product
                 binding.textAmount.text = "${this.amount} gram"
                 binding.textBalance.text = Formatter.rupiahFormatter(this.totalPrice)
+                binding.cardPocket.setOnClickListener {
+                    onClickListener.onChangePocket(position)
+                }
             }
         }
     }
@@ -37,6 +40,10 @@ class HomePocketAdapter: RecyclerView.Adapter<HomePocketAdapter.HomePocketViewHo
         pockets.clear()
         pockets.addAll(pocket)
         notifyDataSetChanged()
+    }
+
+    interface OnClickItem {
+        fun onChangePocket(position: Int)
     }
 
 }
