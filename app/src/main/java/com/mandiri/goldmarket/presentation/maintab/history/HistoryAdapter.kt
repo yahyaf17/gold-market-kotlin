@@ -12,7 +12,7 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     private var histories = mutableListOf<History>()
 
-    class HistoryViewHolder(val binding: HistoryListItemBinding): RecyclerView.ViewHolder(binding.root)
+    inner class HistoryViewHolder(val binding: HistoryListItemBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = HistoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,22 +20,7 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        with(holder) {
-            with(histories[position]) {
-                binding.textProduct.text = this.product
-                binding.textPocketName.text = this.pocketName
-                binding.textPurchaseType.text = this.purchaseType
-                binding.textDate.text = Formatter.dateFormatter(this.purchaseDate)
-                binding.textAmount.text = "${this.amount} gram"
-                binding.textTotalPrice.text = Formatter.rupiahFormatter(this.totalPrice)
-                if (this.purchaseType == "Buy") {
-                    binding.imageHistory.setImageResource(R.drawable.ic_up_arrow)
-                }
-                if (this.purchaseType == "Sell") {
-                    binding.imageHistory.setImageResource(R.drawable.ic_down_arrow)
-                }
-            }
-        }
+        holder.binding.history = histories[position]
     }
 
     override fun getItemCount(): Int {

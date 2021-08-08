@@ -1,159 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/gm_white"
-    tools:context=".presentation.maintab.profile.ProfileFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="com.mandiri.goldmarket.utils.Formatter"/>
+        <variable
+            name="profileVM"
+            type="com.mandiri.goldmarket.presentation.maintab.profile.ProfileViewModel" />
+    </data>
 
-    <View
-        android:id="@+id/background"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:background="@drawable/radius_bottom_only"
-        android:backgroundTintMode="add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gm_white"
+        tools:context=".presentation.maintab.profile.ProfileFragment">
 
-    <TextView
-        android:id="@+id/textEmailProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textName" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="104dp"
-        android:layout_height="72dp"
-        android:src="@drawable/ic_profile_user"
-        app:layout_constraintBottom_toTopOf="@+id/textName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/background" />
-
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/asap_bold"
-        android:text=""
-        android:textColor="@color/gm_dark_grey"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/textEmailProfile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <Button
-        android:id="@+id/btnSignOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/sign_out"
-        android:textColor="@color/gm_white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/btnEditProfile"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_baseline_edit_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/gm_dark_grey" />
-
-    <LinearLayout
-        android:id="@+id/container_main_info"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/background">
+        <View
+            android:id="@+id/background"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:background="@drawable/radius_bottom_only"
+            android:backgroundTintMode="add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/totalPocket"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
+            android:id="@+id/textEmailProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{profileVM.customerLiveData.email}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textName" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="104dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_profile_user"
+            app:layout_constraintBottom_toTopOf="@+id/textName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background" />
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/asap_bold"
-            android:text="3"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:text="@{profileVM.customerLiveData.firstName + ' ' + profileVM.customerLiveData.lastName}"
+            android:textColor="@color/gm_dark_grey"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/textEmailProfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-        <TextView
-            android:id="@+id/totalBalance"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:fontFamily="@font/asap_bold"
-            android:text="Rp 13.000.000"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+        <Button
+            android:id="@+id/btnSignOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/sign_out"
+            android:textColor="@color/gm_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/btnEditProfile"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gm_dark_grey" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="15dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_main_info">
+        <LinearLayout
+            android:id="@+id/container_main_info"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background">
 
-        <TextView
-            android:id="@+id/pocket"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:fontFamily="@font/asap"
-            android:text="@string/pocket"
-            android:textAlignment="center" />
+            <TextView
+                android:id="@+id/totalPocket"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="@font/asap_bold"
+                android:text="@{Integer.toString(profileVM.pocketCountLiveData)}"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/balance"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:fontFamily="@font/asap"
-            android:text="@string/balance"
-            android:textAlignment="center" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/totalBalance"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@{Formatter.INSTANCE.rupiahFormatter(profileVM.totalBalanceLiveData)}"
+                android:fontFamily="@font/asap_bold"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
-    <ProgressBar
-        android:id="@+id/profile_progressbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/background" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_main_info">
+
+            <TextView
+                android:id="@+id/pocket"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="@font/asap"
+                android:text="@string/pocket"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/balance"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="@font/asap"
+                android:text="@string/balance"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/profile_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/background" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

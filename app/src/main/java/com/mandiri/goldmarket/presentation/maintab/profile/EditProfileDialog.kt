@@ -52,7 +52,7 @@ class EditProfileDialog: DialogFragment() {
                                 customer.password
                             )
                         )
-                        viewModel.value.getCustomerInfo(customer.username)
+                        viewModel.value.getProfileInfo(customer.username)
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { dialog, id ->

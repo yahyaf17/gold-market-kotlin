@@ -1,299 +1,310 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/gm_white"
-    tools:context=".presentation.maintab.home.HomeFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <View
-        android:id="@+id/container_pocket_info"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/radius_all"
-        android:backgroundTint="#FFE082"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTotalBalance" />
+    <data>
+        <import type="com.mandiri.goldmarket.utils.Formatter"/>
+        <variable
+            name="homeVM"
+            type="com.mandiri.goldmarket.presentation.maintab.home.HomeViewModel" />
+    </data>
 
-    <View
-        android:id="@+id/container_current"
-        android:layout_width="0dp"
-        android:layout_height="125dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/radius_all"
-        android:backgroundTint="#FFE0B2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gm_white"
+        tools:context=".presentation.maintab.home.HomeFragment">
 
-    <Button
-        android:id="@+id/btnBuy"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/radius_all"
-        android:backgroundTint="@color/gm_dark_grey"
-        android:backgroundTintMode="add"
-        android:fontFamily="@font/asap_bold"
-        android:hapticFeedbackEnabled="true"
-        android:text="@string/buy"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/container_current"
-        app:layout_constraintEnd_toStartOf="@+id/btnSell"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="@id/container_current" />
+        <View
+            android:id="@+id/container_pocket_info"
+            android:layout_width="0dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/radius_all"
+            android:backgroundTint="#FFE082"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTotalBalance" />
 
-    <Button
-        android:id="@+id/btnSell"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/radius_all"
-        android:backgroundTint="@color/gm_dark_grey"
-        android:fontFamily="@font/asap_bold"
-        android:hapticFeedbackEnabled="true"
-        android:text="@string/sell"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/container_current"
-        app:layout_constraintEnd_toEndOf="@id/container_current"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnBuy" />
+        <View
+            android:id="@+id/container_current"
+            android:layout_width="0dp"
+            android:layout_height="125dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/radius_all"
+            android:backgroundTint="#FFE0B2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textWelcome"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/asap_bold"
-        android:gravity="start"
-        android:text="@string/welcome_home"
-        android:textColor="@color/gm_primary"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/btnBuy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/radius_all"
+            android:backgroundTint="@color/gm_dark_grey"
+            android:backgroundTintMode="add"
+            android:fontFamily="@font/asap_bold"
+            android:hapticFeedbackEnabled="true"
+            android:text="@string/buy"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/container_current"
+            app:layout_constraintEnd_toStartOf="@+id/btnSell"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="@id/container_current" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:fontFamily="@font/asap"
-        android:gravity="start"
-        android:text="Your total balance"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textWelcome" />
+        <Button
+            android:id="@+id/btnSell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/radius_all"
+            android:backgroundTint="@color/gm_dark_grey"
+            android:fontFamily="@font/asap_bold"
+            android:hapticFeedbackEnabled="true"
+            android:text="@string/sell"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/container_current"
+            app:layout_constraintEnd_toEndOf="@id/container_current"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnBuy" />
 
-    <TextView
-        android:id="@+id/textTotalBalance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/asap_bold"
-        android:text="Rp"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        <TextView
+            android:id="@+id/textWelcome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/asap_bold"
+            android:gravity="start"
+            android:text="@{@string/welcome_home(homeVM.customerLiveData.firstName, homeVM.customerLiveData.lastName)}"
+            android:textColor="@color/gm_primary"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:src="@drawable/ic_profile_user"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textWelcome"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/asap"
+            android:gravity="start"
+            android:text="Your total balance"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textWelcome" />
 
-    <TextView
-        android:id="@+id/textCurrentTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/asap_bold"
-        android:text="@string/current_pocket"
-        android:textColor="@color/gm_primary_dark"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/container_pocket_info"
-        app:layout_constraintStart_toStartOf="@+id/container_pocket_info"
-        app:layout_constraintTop_toTopOf="@+id/container_pocket_info" />
+        <TextView
+            android:id="@+id/textTotalBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/asap_bold"
+            android:text="@{Formatter.INSTANCE.rupiahFormatter(homeVM.totalBalanceLiveData)}"
+            android:textColor="@color/black"
+            android:textSize="28sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <TextView
-        android:id="@+id/textPocketTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/asap_bold"
-        android:text="Grasberg Pocket"
-        android:gravity="end"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/container_pocket_info"
-        app:layout_constraintTop_toBottomOf="@+id/textCurrentTitle" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_profile_user"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textWelcome"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textPocketAmount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/asap_bold"
-        android:gravity="end"
-        android:text="Rp 5.000.000"
-        android:textColor="@color/gm_dark_grey"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/container_pocket_info"
-        app:layout_constraintTop_toBottomOf="@+id/textPocketTitle" />
+        <TextView
+            android:id="@+id/textCurrentTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/asap_bold"
+            android:text="@string/current_pocket"
+            android:textColor="@color/gm_primary_dark"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/container_pocket_info"
+            app:layout_constraintStart_toStartOf="@+id/container_pocket_info"
+            app:layout_constraintTop_toTopOf="@+id/container_pocket_info" />
 
-    <TextView
-        android:id="@+id/textPocketQty"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/asap"
-        android:gravity="start"
-        android:text="7 gram"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="@+id/container_pocket_info"
-        app:layout_constraintTop_toBottomOf="@+id/textPocketTitle" />
+        <TextView
+            android:id="@+id/textPocketTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/asap_bold"
+            android:text="@{homeVM.pocketSelectedLiveData.name}"
+            android:gravity="end"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/container_pocket_info"
+            app:layout_constraintTop_toBottomOf="@+id/textCurrentTitle" />
 
-    <TextView
-        android:id="@+id/textPocketType"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/asap"
-        android:text="Pocket Type: Gold"
-        app:layout_constraintStart_toStartOf="@+id/container_pocket_info"
-        app:layout_constraintTop_toBottomOf="@+id/textCurrentTitle" />
+        <TextView
+            android:id="@+id/textPocketAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/asap_bold"
+            android:gravity="end"
+            android:text="@{Formatter.INSTANCE.rupiahFormatter(homeVM.pocketSelectedLiveData.totalPrice)}"
+            android:textColor="@color/gm_dark_grey"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/container_pocket_info"
+            app:layout_constraintTop_toBottomOf="@+id/textPocketTitle" />
 
-    <Button
-        android:id="@+id/btnCreatePocket"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Create Pocket"
-        app:layout_constraintBottom_toTopOf="@+id/container_current"
-        app:layout_constraintEnd_toStartOf="@+id/btnSwitchProduct"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_pocket" />
+        <TextView
+            android:id="@+id/textPocketQty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/asap"
+            android:gravity="start"
+            android:text="@{@string/gram_format(homeVM.pocketSelectedLiveData.amount)}"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="@+id/container_pocket_info"
+            app:layout_constraintTop_toBottomOf="@+id/textPocketTitle" />
 
-    <Button
-        android:id="@+id/btnSwitchProduct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Switch Product"
-        app:layout_constraintBottom_toTopOf="@+id/container_current"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnCreatePocket"
-        app:layout_constraintTop_toBottomOf="@+id/rv_pocket" />
+        <TextView
+            android:id="@+id/textPocketType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/asap"
+            android:text="@{@string/pocket_type(homeVM.pocketSelectedLiveData.product)}"
+            app:layout_constraintStart_toStartOf="@+id/container_pocket_info"
+            app:layout_constraintTop_toBottomOf="@+id/textCurrentTitle" />
 
-    <TextView
-        android:id="@+id/textLatestTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/asap_bold"
-        android:text="Latest Price"
-        android:textColor="@color/gm_primary_dark"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.469"
-        app:layout_constraintStart_toStartOf="@+id/container_current"
-        app:layout_constraintTop_toTopOf="@+id/container_current" />
+        <Button
+            android:id="@+id/btnCreatePocket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Create Pocket"
+            app:layout_constraintBottom_toTopOf="@+id/container_current"
+            app:layout_constraintEnd_toStartOf="@+id/btnSwitchProduct"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_pocket" />
 
-    <TextView
-        android:id="@+id/textPriceBuy"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="@font/asap_bold"
-        android:text="Rp 872.000"
-        android:gravity="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnBuy"
-        app:layout_constraintEnd_toStartOf="@+id/textPriceSell"
-        app:layout_constraintStart_toStartOf="@+id/container_current" />
+        <Button
+            android:id="@+id/btnSwitchProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Switch Product"
+            app:layout_constraintBottom_toTopOf="@+id/container_current"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnCreatePocket"
+            app:layout_constraintTop_toBottomOf="@+id/rv_pocket" />
 
-    <TextView
-        android:id="@+id/textPriceSell"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="@font/asap_bold"
-        android:text="Rp 890.000"
-        android:textSize="20sp"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/btnSell"
-        app:layout_constraintEnd_toEndOf="@+id/container_current"
-        app:layout_constraintStart_toEndOf="@+id/textPriceBuy" />
+        <TextView
+            android:id="@+id/textLatestTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/asap_bold"
+            android:text="Latest Price"
+            android:textColor="@color/gm_primary_dark"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.469"
+            app:layout_constraintStart_toStartOf="@+id/container_current"
+            app:layout_constraintTop_toTopOf="@+id/container_current" />
 
-    <ProgressBar
-        android:id="@+id/home_progressbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textPriceBuy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/asap_bold"
+            android:text="Rp 872.000"
+            android:gravity="center"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnBuy"
+            app:layout_constraintEnd_toStartOf="@+id/textPriceSell"
+            app:layout_constraintStart_toStartOf="@+id/container_current" />
 
-    <TextView
-        android:id="@+id/textListOfPocket"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/asap_bold"
-        android:text="List of Pocket"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_pocket_info" />
+        <TextView
+            android:id="@+id/textPriceSell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/asap_bold"
+            android:text="Rp 890.000"
+            android:textSize="20sp"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/btnSell"
+            app:layout_constraintEnd_toEndOf="@+id/container_current"
+            app:layout_constraintStart_toEndOf="@+id/textPriceBuy" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_pocket"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnCreatePocket"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textListOfPocket" />
+        <ProgressBar
+            android:id="@+id/home_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textListOfPocket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/asap_bold"
+            android:text="List of Pocket"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_pocket_info" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_pocket"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnCreatePocket"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textListOfPocket" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

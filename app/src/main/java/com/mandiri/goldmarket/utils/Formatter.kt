@@ -17,4 +17,9 @@ object Formatter {
         val formatter = SimpleDateFormat("dd MMMM yyyy", locale)
         return formatter.format(value)
     }
+
+    fun gramFormat(value: Double): String {
+        val gr = NumberFormat.getNumberInstance(locale).format(value)
+        return "$gr gram"
+    }
 }

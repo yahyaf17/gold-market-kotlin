@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
+    id("kotlin-kapt")
 }
 
 android {
@@ -19,7 +20,8 @@ android {
     }
 
     buildFeatures{
-        viewBinding = true
+//        viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {

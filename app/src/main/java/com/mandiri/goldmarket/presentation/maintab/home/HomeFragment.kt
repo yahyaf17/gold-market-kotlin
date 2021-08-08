@@ -30,8 +30,6 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var binding: FragmentHomeBinding
     private lateinit var customerUsername: String
-    private lateinit var customerSelected: Customer
-    private lateinit var pocketSelected: Pocket
     private lateinit var pockets: List<Pocket>
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -60,12 +58,14 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getCustomer(customerUsername)
-        viewModel.getBalanceInfo()
-        viewModel.getCurrentPocket("Grasberg")
-        viewModel.getPockets()
         subscriber()
+        viewModel.getHomeInfo(customerUsername, "Grasberg")
+//        viewModel.getCurrentPocket( "Grasberg")
         binding.apply {
+
+            lifecycleOwner = this@HomeFragment
+            homeVM = viewModel
+
             btnCreatePocket.setOnClickListener {
                 NewPocketDialog.newInstance().show(childFragmentManager, NewPocketDialog.TAG)
             }
@@ -78,61 +78,18 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     }
 
     private fun subscriber() {
-        binding.apply {
-            homePocketAdapter = HomePocketAdapter(this@HomeFragment)
-            val pocketsObserver: Observer<EventResult> = Observer { events ->
-                when(events) {
-                    is EventResult.Loading -> showProgressBar()
-                    is EventResult.Success -> {
-                        hideProgressBar()
-                        pockets = events.data as List<Pocket>
-                        homePocketAdapter.updateData(pockets)
-                    }
-                    is EventResult.ErrorMessage -> hideProgressBar()
-                    else -> EventResult.Idle
+        homePocketAdapter = HomePocketAdapter(this@HomeFragment)
+        viewModel.response.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is EventResult.Loading -> showProgressBar()
+                is EventResult.Success -> {
+                    hideProgressBar()
+                    pockets = it.data as List<Pocket>
+                    homePocketAdapter.updateData(pockets)
                 }
+                is EventResult.ErrorMessage -> hideProgressBar()
+                else -> EventResult.Idle
             }
-            val customerObserver: Observer<EventResult> = Observer<EventResult> { events ->
-                when(events) {
-                    is EventResult.Loading -> showProgressBar()
-                    is EventResult.Success -> {
-                        hideProgressBar()
-                        customerSelected = events.data as Customer
-                        textWelcome.text = "Welcome, ${customerSelected.firstName} ${customerSelected.lastName}!"
-                    }
-                    is EventResult.ErrorMessage -> hideProgressBar()
-                    else -> EventResult.Idle
-                }
-            }
-            val selectedPocketObserver: Observer<EventResult> = Observer<EventResult> { events ->
-                when(events) {
-                    is EventResult.Loading -> showProgressBar()
-                    is EventResult.Success -> {
-                        pocketSelected = events.data as Pocket
-                        textPocketQty.text = "${pocketSelected.amount} gram"
-                        textPocketTitle.text = pocketSelected.name
-                        textPocketAmount.text = Formatter.rupiahFormatter(pocketSelected.totalPrice)
-                        hideProgressBar()
-                    }
-                    is EventResult.ErrorMessage -> hideProgressBar()
-                    else -> EventResult.Idle
-                }
-            }
-            val balanceObserver: Observer<EventResult> = Observer<EventResult> { events ->
-                when(events) {
-                    is EventResult.Loading -> showProgressBar()
-                    is EventResult.Success -> {
-                        hideProgressBar()
-                        textTotalBalance.text = Formatter.rupiahFormatter(events.data as BigDecimal)
-                    }
-                    is EventResult.ErrorMessage -> hideProgressBar()
-                    else -> EventResult.Idle
-                }
-            }
-            viewModel.pocketsLiveData.observe(viewLifecycleOwner, pocketsObserver)
-            viewModel.customerLiveData.observe(viewLifecycleOwner, customerObserver)
-            viewModel.totalBalanceLiveData.observe(viewLifecycleOwner, balanceObserver)
-            viewModel.pocketSelectedLiveData.observe(viewLifecycleOwner, selectedPocketObserver)
         }
     }
 

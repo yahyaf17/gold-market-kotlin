@@ -40,9 +40,10 @@ class HistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getHistories()
         subscriber()
+        viewModel.getHistories()
         binding.apply {
+            lifecycleOwner = this@HistoryFragment
             rvHistory.apply {
                 layoutManager = LinearLayoutManager(this@HistoryFragment.context)
                 adapter = historyAdapter
@@ -51,31 +52,23 @@ class HistoryFragment : Fragment() {
     }
 
     private fun subscriber() {
-        binding.apply {
-            historyAdapter = HistoryAdapter()
-            val historyObserver: Observer<EventResult> = Observer<EventResult> { events ->
-                when(events) {
-                    is EventResult.Loading -> {
+        historyAdapter = HistoryAdapter()
+        viewModel.response.observe(this.viewLifecycleOwner) {
+            when (it) {
+                is EventResult.Loading -> showProgressBar()
+                is EventResult.Success -> {
+                    hideProgressBar()
+                    val histories = it.data as List<History>
+                    historyAdapter.updateData(it.data)
+                    if (histories.isNotEmpty()) {
                         hideEmptyDataHandling()
-                        showProgressBar()
+                    } else {
+                        showEmptyDataHandling()
                     }
-                    is EventResult.Success -> {
-                        val histories = events.data as List<History>
-                        historyAdapter.updateData(events.data)
-                        hideProgressBar()
-                        if (histories.isNotEmpty()) {
-                            hideEmptyDataHandling()
-                        } else {
-                           showEmptyDataHandling()
-                        }
-                    }
-                    is EventResult.ErrorMessage ->  {
-                        hideProgressBar()
-                    }
-                    else -> EventResult.Idle
                 }
+                is EventResult.ErrorMessage -> hideProgressBar()
+                else -> EventResult.Idle
             }
-            viewModel.historyLiveData.observe(viewLifecycleOwner, historyObserver)
         }
     }
 
