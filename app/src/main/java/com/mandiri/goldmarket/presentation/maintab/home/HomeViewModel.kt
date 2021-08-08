@@ -11,6 +11,10 @@ import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
 import com.mandiri.goldmarket.utils.EventResult
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.math.BigDecimal
 
@@ -49,7 +53,6 @@ class HomeViewModel(private val customerRepo: CustomerRepositoryImpl, private va
 
     private fun homeObservable(username: String, pocketName: String) {
         _response.value = EventResult.Loading
-        Handler(Looper.getMainLooper()).postDelayed({
             try {
                 val customer = findCustomerByUsername(username)
                 _customerLiveData.value = customer
@@ -64,7 +67,6 @@ class HomeViewModel(private val customerRepo: CustomerRepositoryImpl, private va
             } catch (e: Exception) {
                 _response.value = EventResult.ErrorMessage("Can't Retrieve Customer Data")
             }
-        }, 1000)
     }
 
     fun getHomeInfo(username: String, pocketName: String) {
