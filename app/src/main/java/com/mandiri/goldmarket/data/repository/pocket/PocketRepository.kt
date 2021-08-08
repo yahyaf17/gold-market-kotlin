@@ -10,4 +10,5 @@ interface PocketRepository {
     fun countPocket(): Int
     fun totalBalanceOfPocket(): BigDecimal
     fun createNewPocket(name: String, product: String): Pocket
+    fun addPocketTransaction(pocket: String, trx: String, amount: Double, price: BigDecimal): Pocket
 }

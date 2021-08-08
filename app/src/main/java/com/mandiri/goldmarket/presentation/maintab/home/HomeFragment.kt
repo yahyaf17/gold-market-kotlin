@@ -7,23 +7,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mandiri.goldmarket.data.model.Customer
+import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
+import com.mandiri.goldmarket.data.repository.product.ProductRepositoryImpl
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
 import com.mandiri.goldmarket.presentation.maintab.pocket.NewPocketDialog
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.CustomSharedPreferences.Username
 import com.mandiri.goldmarket.utils.EventResult
-import com.mandiri.goldmarket.utils.Formatter
 import kotlinx.android.synthetic.main.fragment_home.*
-import java.math.BigDecimal
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
 
@@ -33,7 +34,10 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     private lateinit var pockets: List<Pocket>
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return HomeViewModel(CustomerRepositoryImpl(), PocketRepositoryImpl()) as T
+            return HomeViewModel(
+                CustomerRepositoryImpl(),
+                PocketRepositoryImpl(),
+                ProductRepositoryImpl()) as T
         }
     }
     private val viewModel: HomeViewModel by viewModels { factory }
@@ -59,8 +63,7 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
-        viewModel.getHomeInfo(customerUsername, "Grasberg")
-//        viewModel.getCurrentPocket( "Grasberg")
+        viewModel.getHomeInfo(customerUsername, "Grasberg", "1")
         binding.apply {
 
             lifecycleOwner = this@HomeFragment
@@ -73,6 +76,24 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
             rvPocket.apply {
                 layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = homePocketAdapter
+            }
+
+            btnBuy.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_transactionFragment,
+                    bundleOf(
+                        TRX_TYPE to "Buy",
+                        TRX_AMOUNT to viewModel.productLiveData.value?.priceBuy?.toDouble(),
+                        POCKET_SELECTED to viewModel.pocketSelectedLiveData.value?.name
+                    ))
+            }
+
+            btnSell.setOnClickListener {
+                findNavController().navigate(R.id.action_homeFragment_to_transactionFragment,
+                    bundleOf(
+                        TRX_TYPE to "Sell",
+                        TRX_AMOUNT to viewModel.productLiveData.value?.priceSell?.toDouble(),
+                        POCKET_SELECTED to viewModel.pocketSelectedLiveData.value?.name
+                    ))
             }
         }
     }
@@ -104,4 +125,11 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     override fun onChangePocket(position: Int) {
         viewModel.getCurrentPocket(pockets[position].name)
     }
+
+    companion object {
+        const val TRX_TYPE = "TRX_TYPE"
+        const val TRX_AMOUNT = "0"
+        const val POCKET_SELECTED = "POCKET"
+    }
+
 }

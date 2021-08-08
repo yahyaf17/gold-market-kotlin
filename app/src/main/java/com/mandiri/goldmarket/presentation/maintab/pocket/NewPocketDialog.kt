@@ -46,7 +46,7 @@ class NewPocketDialog: DialogFragment() {
                 .setPositiveButton("Create",
                     DialogInterface.OnClickListener { dialog, id ->
                         viewModel.value.createNewPocket(pocketNameText.text.toString())
-                        viewModel.value.getHomeInfo(customerUsername, pocketNameText.text.toString())
+                        viewModel.value.getHomeInfo(customerUsername, pocketNameText.text.toString(), "1")
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { dialog, id ->

@@ -43,6 +43,19 @@ class PocketRepositoryImpl: PocketRepository {
         return newPocket
     }
 
+    override fun addPocketTransaction(pocket: String, trx: String, amount: Double, price: BigDecimal): Pocket {
+        val selectedPocket = findById(pocket)
+        if (trx == "Buy") {
+            selectedPocket!!.amount += amount
+            selectedPocket!!.totalPrice += price
+        }
+        if (trx == "Sell") {
+            selectedPocket!!.amount -= amount
+            selectedPocket!!.totalPrice -= price
+        }
+        return selectedPocket!!
+    }
+
     companion object {
         var pocketDb = mutableListOf(
             Pocket(

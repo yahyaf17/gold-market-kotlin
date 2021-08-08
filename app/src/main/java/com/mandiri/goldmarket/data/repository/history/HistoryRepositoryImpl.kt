@@ -15,6 +15,11 @@ class HistoryRepositoryImpl: HistoryRepository {
         return historyDb.removeAt(positon)
     }
 
+    override fun addHistory(history: History): History {
+        historyDb.add(history)
+        return history
+    }
+
     companion object {
         var historyDb = mutableListOf(
             History(
