@@ -27,9 +27,7 @@ class RegisterFragment : Fragment() {
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val db = this@RegisterFragment.context?.let { AppDatabase.getDatabase(it) }
-            return RegisterViewModel(
-                CustomerRepositoryImpl(),
-                CustomerRepositoryRoom(db!!)) as T
+            return RegisterViewModel(CustomerRepositoryRoom(db!!)) as T
         }
     }
     private val viewModel: RegisterViewModel by viewModels { factory }
@@ -95,7 +93,7 @@ class RegisterFragment : Fragment() {
         AlertDialog.Builder(this.context).apply {
             setTitle("Success Register")
             setMessage("Register successful, please login!")
-            setPositiveButton("To Login") { dialog, which ->
+            setPositiveButton("To Login") { _, _ ->
                 findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
             }.create().show()
         }

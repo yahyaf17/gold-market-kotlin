@@ -13,9 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.db.AppDatabase
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
 import com.mandiri.goldmarket.databinding.FragmentProfileBinding
 import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity

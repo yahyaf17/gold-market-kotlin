@@ -59,7 +59,6 @@ class HomeViewModel(private val productRepo: ProductRepositoryImpl,
             _response.postValue(EventResult.Loading)
             delay(1000)
             val customer = customerRepo.getCustomerById(customerId)
-//            val pocketSelected = pocketRoom.findPocketById(pocketId)
             val totalBalance = pocketRoom.getTotalBalanceByCustomer(customerId)
             val pockets = pocketRoom.findPocketByCustomer(customerId)
             val product = productRepo.findProductById(productId)
@@ -69,7 +68,6 @@ class HomeViewModel(private val productRepo: ProductRepositoryImpl,
                 return@launch
             }
             _customerLiveData.postValue(customer)
-//            _pocketSelectedLiveData.postValue(pocketSelected)
             _totalBalanceLiveData.postValue(totalBalance ?: 0.0)
             _pocketsLiveData.postValue(pockets?.get(0)?.pocket)
             _productLiveData.postValue(product)
@@ -83,8 +81,6 @@ class HomeViewModel(private val productRepo: ProductRepositoryImpl,
 
     private fun getPocketSelected(idPocket: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            _response.postValue(EventResult.Loading)
-            delay(1000)
             val pocketSelected = pocketRoom.findPocketById(idPocket)
             _pocketSelectedLiveData.postValue(pocketSelected)
         }

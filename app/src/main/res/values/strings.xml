@@ -42,4 +42,5 @@
     <string name="enter_amount_in_gram">Enter amount in gram</string>
     <string name="input_amount_in_gram">Input Amount in Gram</string>
     <string name="oops_you_don_t_have_any_pocket_please_create_and_select_it_before_click_buy_or_sell">Oops! You don\'t have any pocket. Please create and select it before click buy or sell</string>
+    <string name="alert_pick_pocket">Select or create your pocket to make a transaction</string>
 </resources>

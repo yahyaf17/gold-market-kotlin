@@ -43,7 +43,7 @@ class EditProfileDialog: DialogFragment() {
                 lastNameView.setText(customer.lastName)
             })
                 .setPositiveButton("Update",
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         viewModel.value.updateCustomerData(
                             Customer(
                                 customerId,
@@ -57,7 +57,7 @@ class EditProfileDialog: DialogFragment() {
                         viewModel.value.getProfileInfo(customerId)
                     })
                 .setNegativeButton("Cancel",
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         getDialog()?.cancel()
                     })
             builder.create()

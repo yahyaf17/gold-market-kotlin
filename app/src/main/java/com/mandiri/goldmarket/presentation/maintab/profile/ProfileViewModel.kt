@@ -7,13 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.model.Customer
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class ProfileViewModel(private val customerRepo: CustomerRepositoryRoom,
                        private val pocketRoom: PocketRepositoryRoom

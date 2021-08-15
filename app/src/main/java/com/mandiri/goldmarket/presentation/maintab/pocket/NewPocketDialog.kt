@@ -9,12 +9,9 @@ import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.presentation.maintab.home.HomeViewModel
-import com.mandiri.goldmarket.presentation.maintab.profile.EditProfileDialog
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
-import com.mandiri.goldmarket.utils.CustomSharedPreferences.Username
 import kotlin.properties.Delegates
 
 class NewPocketDialog: DialogFragment() {
@@ -41,12 +38,12 @@ class NewPocketDialog: DialogFragment() {
                 pocketNameText = findViewById(R.id.pocket_name_dialog)
             })
                 .setPositiveButton("Create",
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         viewModel.value.createNewPocketRoom(pocketNameText.text.toString(), customerId)
                         viewModel.value.getHomeInfo(customerId, 1)
                     })
                 .setNegativeButton("Cancel",
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         getDialog()?.cancel()
                     })
             builder.create()

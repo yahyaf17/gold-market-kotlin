@@ -29,7 +29,7 @@ import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
 import com.mandiri.goldmarket.utils.EventResult
 import kotlin.properties.Delegates
 
-class LoginFragment() : Fragment() {
+class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val factory =  object: ViewModelProvider.Factory {
@@ -70,8 +70,8 @@ class LoginFragment() : Fragment() {
             disableLoginBtn(textEdits)
             btnLogin.setOnClickListener {
                 viewModel.loginCustomerRoom(
-                    textLoginUsername.text.toString() ?: " ",
-                    textLoginPassword.text.toString() ?: " "
+                    textLoginUsername.text.toString(),
+                    textLoginPassword.text.toString()
                 )
             }
 
@@ -114,11 +114,11 @@ class LoginFragment() : Fragment() {
         val intent = Intent(thisActivity, MainTabActivity::class.java)
         customer?.let {
 //            sharedPref.Username = binding.textLoginUsername.text.toString()
-            sharedPref.CustomerId = customer?.customerId!!
+            sharedPref.CustomerId = customer.customerId
             startActivity(intent)
             thisActivity.finish()
         } ?: Toast.makeText(this@LoginFragment.context, "Wrong password or account not registered", Toast.LENGTH_LONG).show()
-        Log.d("LoginFragment", "onViewCreated cust: ${customer}")
+        Log.d("LoginFragment", "onViewCreated cust: $customer")
     }
 
     private fun subscribe() {

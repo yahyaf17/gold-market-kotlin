@@ -69,6 +69,10 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
         viewModel.getHomeInfo(customerId, 1)
         binding.apply {
 
+            // active when current pocket is showing
+            btnSell.isEnabled = false
+            btnBuy.isEnabled = false
+
             lifecycleOwner = this@HomeFragment
             homeVM = viewModel
 
@@ -115,7 +119,7 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
                 is EventResult.Loading -> showProgressBar()
                 is EventResult.Success -> {
                     hideProgressBar()
-                    pockets = (it.data as? List<Pocket>)!!
+                    pockets = it.data as List<Pocket>
                     if (pockets.isEmpty()) {
                         showEmptyDataHandling()
                         return@observe
@@ -138,6 +142,11 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     }
 
     override fun onChangePocket(position: Int) {
+        binding.apply {
+            btnBuy.isEnabled = true
+            btnSell.isEnabled = true
+            alertPickPocket.visibility = View.GONE
+        }
         viewModel.getCurrentPocket(pockets[position].pocketId)
     }
 
