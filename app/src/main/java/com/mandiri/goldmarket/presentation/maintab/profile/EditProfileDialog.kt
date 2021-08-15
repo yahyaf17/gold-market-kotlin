@@ -10,10 +10,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.model.Customer
+import kotlin.properties.Delegates
 
 class EditProfileDialog: DialogFragment() {
 
-    private lateinit var username: String
+    private var customerId by Delegates.notNull<Int>()
     private lateinit var customer: Customer
     private lateinit var firstNameView: EditText
     private lateinit var lastNameView: EditText
@@ -24,19 +25,19 @@ class EditProfileDialog: DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
-            username = this.getString(USERNAME_EDIT).toString()
+            customerId = this.getInt(USERNAME_EDIT)
         }
-        customer = viewModel.value.findCustomerByUsername(username)!!
+        viewModel.value.findCustomerById(customerId)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            // Use the Builder class for convenient dialog construction
+            customer = viewModel.value.customerLiveData.value!!
             Log.d(TAG, "onCreateDialog: ${customer.firstName} ${customer.lastName} ${customer.email}")
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
             builder.setView(inflater.inflate(R.layout.edit_profile_dialog, null).apply {
-                firstNameView  = findViewById(R.id.first_name_dialog)
+                firstNameView = findViewById(R.id.first_name_dialog)
                 lastNameView  = findViewById(R.id.last_name_dialog)
                 firstNameView.setText(customer.firstName)
                 lastNameView.setText(customer.lastName)
@@ -45,6 +46,7 @@ class EditProfileDialog: DialogFragment() {
                     DialogInterface.OnClickListener { dialog, id ->
                         viewModel.value.updateCustomerData(
                             Customer(
+                                customerId,
                                 firstNameView.text.toString(),
                                 lastNameView.text.toString(),
                                 customer.email,
@@ -52,7 +54,7 @@ class EditProfileDialog: DialogFragment() {
                                 customer.password
                             )
                         )
-                        viewModel.value.getProfileInfo(customer.username)
+                        viewModel.value.getProfileInfo(customerId)
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { dialog, id ->
@@ -67,9 +69,9 @@ class EditProfileDialog: DialogFragment() {
 
         private const val USERNAME_EDIT = "customer"
 
-        fun newInstance(username: String) = EditProfileDialog().apply {
+        fun newInstance(id: Int) = EditProfileDialog().apply {
             arguments = Bundle().apply {
-                putString(USERNAME_EDIT, username)
+                putInt(USERNAME_EDIT, id)
             }
         }
     }

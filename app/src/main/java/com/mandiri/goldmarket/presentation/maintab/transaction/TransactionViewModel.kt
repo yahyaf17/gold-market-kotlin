@@ -3,55 +3,56 @@ package com.mandiri.goldmarket.presentation.maintab.transaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mandiri.goldmarket.data.model.History
-import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryImpl
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
+import androidx.lifecycle.viewModelScope
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
+import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRoom
 import com.mandiri.goldmarket.presentation.maintab.home.HomeFragment
-import java.math.BigDecimal
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class TransactionViewModel(private val pocketRepo: PocketRepositoryImpl, private val historyRepo: HistoryRepositoryImpl): ViewModel() {
+class TransactionViewModel(private val pocketRepo: PocketRepositoryRoom,
+                           private val transactionRepo: TransactionRepositoryRoom
+): ViewModel() {
 
     var transactionType: String = HomeFragment.TRX_TYPE
-    var pricePerGram: BigDecimal = HomeFragment.TRX_AMOUNT.toBigDecimal()
-    var selectedPocket: String = HomeFragment.POCKET_SELECTED
+    var pricePerGram: Double = HomeFragment.TRX_AMOUNT.toDouble()
+    var pocketId: Int = HomeFragment.POCKET_SELECTED.toInt()
     var transactionGoldGram = MutableLiveData(0.0)
 
-    private val _totalPrice = MutableLiveData(BigDecimal(0))
-    val totalPrice: LiveData<BigDecimal>
+    private val _pocketName = MutableLiveData<String>()
+    val pocketName: LiveData<String>
+        get() = _pocketName
+
+    private val _totalPrice = MutableLiveData<Double>()
+    val totalPrice: LiveData<Double>
         get() = _totalPrice
 
     private fun observeTotalPrice() {
-        _totalPrice.value = transactionGoldGram.value?.toBigDecimal()?.times(pricePerGram)
+        _totalPrice.value = transactionGoldGram.value?.toDouble()?.times(pricePerGram)
     }
 
     fun getTotalPrice() {
         observeTotalPrice()
     }
 
-    private fun addPocket() {
-        pocketRepo.addPocketTransaction(
-            selectedPocket,
-            transactionType,
-            transactionGoldGram.value ?: 0.0,
-            _totalPrice.value ?: BigDecimal(0))
+    fun retrievePocketName() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val pocket = pocketRepo.findPocketById(pocketId)
+            _pocketName.postValue(pocket.name)
+        }
     }
 
-    private fun addHistory() {
-        historyRepo.addHistory(
-            History(
-            pocketRepo.findById(selectedPocket)!!.product,
-            transactionType,
-            transactionGoldGram.value ?: 0.0,
-            totalPrice.value ?: BigDecimal(0),
-            selectedPocket,
-            Date())
-        )
-    }
+    fun addTransaction(customerId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionRepo.performPurchase(
+                customerId,
+                pocketId,
+                transactionGoldGram.value ?: 0.0,
+                _totalPrice.value ?: 0.0,
+                transactionType
+            )
+        }
 
-    fun submitTransaction() {
-        addPocket()
-        addHistory()
     }
 
 }

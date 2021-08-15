@@ -4,20 +4,27 @@ import android.content.Context
 import android.content.SharedPreferences
 
 object CustomSharedPreferences {
-    val USER_ID = "USER_ID"
-    val USER_PASSWORD = "PASSWORD"
 
-    fun customPreference(context: Context, name: String): SharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
+    fun credentialsPref(context: Context): SharedPreferences = context.getSharedPreferences("CREDENTIALS", Context.MODE_PRIVATE)
 
-    fun setUsername(context: Context, name: String, username: String) {
-        customPreference(context, name).edit()?.putString("username", username)?.apply()
+    fun setUsername(context: Context, username: String) {
+        credentialsPref(context).edit()?.putString("username", username)?.apply()
     }
 
+    val SharedPreferences.ClearAll
+        get() = edit().clear().apply()
+
     var SharedPreferences.Username
-        get() = getString("username", "user")
+        get() = getString("username", "tes")
         set(value) = edit().putString("username", value).apply()
 
+    var SharedPreferences.CustomerId
+        get() = getInt("user_id", 1)
+        set(value) = edit().putInt("user_id", value).apply()
 
+    var SharedPreferences.PocketId
+        get() = getInt("pocket_id", 0)
+        set(value) = edit().putInt("pocket_id", value).apply()
 
 //    var CustomSharedPreferences.userId
 //        get() = getInt(USER_ID, 0)

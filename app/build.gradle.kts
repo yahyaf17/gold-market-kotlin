@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
 }
 
@@ -20,7 +19,6 @@ android {
     }
 
     buildFeatures{
-//        viewBinding = true
         dataBinding = true
     }
 
@@ -42,6 +40,7 @@ android {
 }
 
 dependencies {
+    kapt("androidx.room:room-compiler:2.3.0")
     AppDependencies.dependencies.getValue("implementation").forEach { d -> implementation(d) }
     AppDependencies.dependencies.getValue("testImplementation").forEach { t -> testImplementation(t) }
     AppDependencies.dependencies.getValue("androidTestImplementation").forEach { ti -> androidTestImplementation(ti) }

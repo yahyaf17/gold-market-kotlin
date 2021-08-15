@@ -116,7 +116,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="@{Formatter.INSTANCE.rupiahFormatter(profileVM.totalBalanceLiveData)}"
+                android:text="@{@string/currency_format(profileVM.totalBalanceLiveData)}"
                 android:fontFamily="@font/asap_bold"
                 android:textAlignment="center"
                 android:textColor="@color/black"

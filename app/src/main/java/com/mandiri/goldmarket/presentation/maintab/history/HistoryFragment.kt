@@ -1,5 +1,6 @@
 package com.mandiri.goldmarket.presentation.maintab.history
 
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,31 +8,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mandiri.goldmarket.data.db.AppDatabase
 import com.mandiri.goldmarket.data.model.History
-import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryImpl
+import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryRoom
 import com.mandiri.goldmarket.databinding.FragmentHistoryBinding
+import com.mandiri.goldmarket.utils.CustomSharedPreferences
+import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
 import com.mandiri.goldmarket.utils.EventResult
-import kotlinx.android.synthetic.main.fragment_history.*
+import kotlin.properties.Delegates
 
 class HistoryFragment : Fragment() {
 
     private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var sharedPref: SharedPreferences
     private lateinit var binding: FragmentHistoryBinding
+    private var customerId by Delegates.notNull<Int>()
     private val factory = object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return HistoryViewModel(HistoryRepositoryImpl()) as T
+            val db = this@HistoryFragment.context?.let { AppDatabase.getDatabase(it) }
+            return HistoryViewModel(HistoryRepositoryRoom(db!!)) as T
         }
     }
     private val viewModel: HistoryViewModel by viewModels { factory }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedPref = CustomSharedPreferences.credentialsPref(requireContext())
+        customerId = sharedPref.CustomerId
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         binding = FragmentHistoryBinding.inflate(layoutInflater, container, false)
@@ -41,7 +53,7 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
-        viewModel.getHistories()
+        viewModel.getHistories(customerId)
         binding.apply {
             lifecycleOwner = this@HistoryFragment
             rvHistory.apply {
@@ -73,19 +85,19 @@ class HistoryFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        history_loading.visibility = View.VISIBLE
+        binding.historyLoading.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
-        history_loading.visibility = View.GONE
+        binding.historyLoading.visibility = View.GONE
     }
 
     private fun showEmptyDataHandling() {
-        empty_handling_container.visibility = View.VISIBLE
+        binding.emptyHandlingContainer.visibility = View.VISIBLE
     }
 
     private fun hideEmptyDataHandling() {
-        empty_handling_container.visibility = View.GONE
+        binding.emptyHandlingContainer.visibility = View.GONE
     }
 
 

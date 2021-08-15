@@ -8,7 +8,7 @@ interface PocketRepository {
     fun findById(pocketName: String): Pocket?
     fun editPocket(pocketName: String, newName: String): Pocket
     fun countPocket(): Int
-    fun totalBalanceOfPocket(): BigDecimal
+    fun totalBalanceOfPocket(): Double
     fun createNewPocket(name: String, product: String): Pocket
-    fun addPocketTransaction(pocket: String, trx: String, amount: Double, price: BigDecimal): Pocket
+    fun addPocketTransaction(pocket: String, trx: String, amount: Double, price: Double): Pocket
 }

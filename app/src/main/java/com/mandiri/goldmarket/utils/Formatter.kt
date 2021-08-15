@@ -9,7 +9,7 @@ object Formatter {
 
     private val locale = Locale("in", "ID")
 
-    fun rupiahFormatter(value: BigDecimal): String {
+    fun rupiahFormatter(value: Double): String {
         return NumberFormat.getCurrencyInstance(locale).format(value)
     }
 

@@ -23,26 +23,31 @@ class HistoryRepositoryImpl: HistoryRepository {
     companion object {
         var historyDb = mutableListOf(
             History(
-                "Gold",
-                "Buy",
-                1.0,
-                BigDecimal(850000),
-                "Grasberg",
-                Date()),
+                product = "Gold",
+                purchaseType = "Buy",
+                amount = 1.0,
+                totalPrice = 850000.0,
+                pocketName = "Grasberg",
+                purchaseDate = Date(),
+                customerId = 0
+            ),
             History(
-                "Gold",
-                "Buy",
-                2.1,
-                BigDecimal(1640000),
-                "Grasberg",
-                Date()),
+                product = "Gold",
+                purchaseType = "Buy",
+                amount = 2.1,
+                totalPrice = 1640000.0,
+                pocketName = "Grasberg",
+                purchaseDate = Date(),
+                customerId = 0
+            ),
             History(
-                "Gold",
-                        "Sell",
-                0.2,
-                BigDecimal(166700),
-                "Grass root",
-                Date()
+                product = "Gold",
+                purchaseType = "Sell",
+                amount = 0.2,
+                totalPrice = 166700.0,
+                pocketName = "Grass root",
+                purchaseDate = Date(),
+                customerId = 0
             )
         )
     }

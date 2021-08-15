@@ -7,5 +7,4 @@ import com.mandiri.goldmarket.presentation.onboarding.register.RegisterViewModel
 class DependencyContainer {
     private val customerRepository = CustomerRepositoryImpl()
     private val historyRepository = HistoryRepositoryImpl()
-    val registerViewModel = RegisterViewModel(customerRepository)
 }

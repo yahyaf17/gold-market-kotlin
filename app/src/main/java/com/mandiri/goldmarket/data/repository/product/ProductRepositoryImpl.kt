@@ -5,19 +5,19 @@ import java.math.BigDecimal
 
 class ProductRepositoryImpl: ProductRepository {
 
-    override fun findProductById(id: String): Product? {
+    override fun findProductById(id: Int): Product? {
         return productDB.find { product ->
-            product.id == id
+            product.productId == id
         }
     }
 
     companion object {
         var productDB = mutableListOf(
             Product(
-                "1",
-                "Gold",
-                BigDecimal(872000),
-                BigDecimal(890000),
+                1,
+                 "Gold",
+                872000.0,
+                890000.0,
             ),
         )
     }

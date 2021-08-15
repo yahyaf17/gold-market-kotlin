@@ -23,26 +23,17 @@ class HomePocketAdapter(private val onClickListener: OnClickItem): RecyclerView.
         holder.binding.cardPocket.setOnClickListener {
             onClickListener.onChangePocket(position)
         }
-//        with(holder) {
-//            with(pockets[position]) {
-//                binding.textTitlePocket.text = this.name
-//                binding.textProductType.text = this.product
-//                binding.textAmount.text = "${this.amount} gram"
-//                binding.textBalance.text = Formatter.rupiahFormatter(this.totalPrice)
-//                binding.cardPocket.setOnClickListener {
-//                    onClickListener.onChangePocket(position)
-//                }
-//            }
-//        }
     }
 
     override fun getItemCount(): Int {
         return pockets.size
     }
 
-    fun updateData(pocket: List<Pocket>) {
+    fun updateData(pocket: List<Pocket>?) {
         pockets.clear()
-        pockets.addAll(pocket)
+        if (pocket != null) {
+            pockets.addAll(pocket)
+        }
         notifyDataSetChanged()
     }
 

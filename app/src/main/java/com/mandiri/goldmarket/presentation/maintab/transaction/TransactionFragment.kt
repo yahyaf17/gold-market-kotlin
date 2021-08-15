@@ -1,5 +1,6 @@
 package com.mandiri.goldmarket.presentation.maintab.transaction
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,35 +8,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
-import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryImpl
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
-import com.mandiri.goldmarket.data.repository.product.ProductRepositoryImpl
+import com.mandiri.goldmarket.data.db.AppDatabase
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
+import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRoom
 import com.mandiri.goldmarket.databinding.FragmentTransactionBinding
 import com.mandiri.goldmarket.presentation.maintab.home.HomeFragment
-import com.mandiri.goldmarket.presentation.maintab.home.HomeViewModel
-import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
+import com.mandiri.goldmarket.utils.CustomSharedPreferences
+import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
 import com.mandiri.goldmarket.utils.Formatter
-import kotlinx.android.synthetic.main.fragment_transaction.*
-import java.math.BigDecimal
+import kotlin.properties.Delegates
 
 class TransactionFragment : Fragment() {
 
     private lateinit var binding: FragmentTransactionBinding
+    private lateinit var sharedPref: SharedPreferences
+    private var customerId by Delegates.notNull<Int>()
     private lateinit var type: String
-    private lateinit var price: BigDecimal
-    private lateinit var selectedPocket: String
+    private var price by Delegates.notNull<Double>()
+    private var selectedPocket by Delegates.notNull<Int>()
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val db = this@TransactionFragment.context?.let { AppDatabase.getDatabase(it) }
             return TransactionViewModel(
-                PocketRepositoryImpl(),
-                HistoryRepositoryImpl()
+                PocketRepositoryRoom(db!!),
+                TransactionRepositoryRoom(db)
             ) as T
         }
     }
@@ -45,9 +46,11 @@ class TransactionFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             type = getString(HomeFragment.TRX_TYPE).toString()
-            price = getDouble(HomeFragment.TRX_AMOUNT).toBigDecimal()
-            selectedPocket = getString(HomeFragment.POCKET_SELECTED).toString()
+            price = getDouble(HomeFragment.TRX_AMOUNT)
+            selectedPocket = getInt(HomeFragment.POCKET_SELECTED)
         }
+        sharedPref = CustomSharedPreferences.credentialsPref(requireContext())
+        customerId = sharedPref.CustomerId
     }
 
     override fun onCreateView(
@@ -64,8 +67,9 @@ class TransactionFragment : Fragment() {
         subscriber()
         viewModel.transactionType = type
         viewModel.pricePerGram = price
-        viewModel.selectedPocket = selectedPocket
+        viewModel.pocketId = selectedPocket
         viewModel.getTotalPrice()
+        viewModel.retrievePocketName()
         binding.apply {
             lifecycleOwner = this@TransactionFragment
             trxVM = viewModel
@@ -82,7 +86,7 @@ class TransactionFragment : Fragment() {
             })
 
             btnSubmitTrx.setOnClickListener {
-                viewModel.submitTransaction()
+                viewModel.addTransaction(customerId)
                 findNavController().navigate(R.id.action_transactionFragment_to_homeFragment)
             }
         }
@@ -92,13 +96,17 @@ class TransactionFragment : Fragment() {
         viewModel.totalPrice.observe(viewLifecycleOwner) {
             binding.trxTotalPrice.text = Formatter.rupiahFormatter(it)
         }
+        viewModel.pocketName.observe(viewLifecycleOwner) {
+            binding.pocketNameDetails.text = it
+        }
     }
 
     fun validate() {
-        if (inputInGram.text.isNullOrBlank() && inputInGram.equals(0.0)) btn_submit_trx.isEnabled = false
-        viewModel.getTotalPrice()
+        binding.apply {
+            if (inputInGram.text.isNullOrBlank() && inputInGram.equals(0.0)) btnSubmitTrx.isEnabled = false
+            viewModel.getTotalPrice()
+        }
     }
-
 
     companion object {
 

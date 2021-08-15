@@ -122,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:fontFamily="@font/asap_bold"
-            android:text="@{Formatter.INSTANCE.rupiahFormatter(homeVM.totalBalanceLiveData)}"
+            android:text="@{@string/currency_format(homeVM.totalBalanceLiveData)}"
             android:textColor="@color/black"
             android:textSize="28sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -174,7 +174,7 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/asap_bold"
             android:gravity="end"
-            android:text="@{Formatter.INSTANCE.rupiahFormatter(homeVM.pocketSelectedLiveData.totalPrice)}"
+            android:text="@{@string/currency_format(homeVM.pocketSelectedLiveData.totalPrice)}"
             android:textColor="@color/gm_dark_grey"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/container_pocket_info"
@@ -200,7 +200,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/asap"
-            android:text="@{@string/pocket_type(homeVM.pocketSelectedLiveData.product)}"
+            android:text="@{@string/pocket_type(homeVM.pocketSelectedLiveData.pocketProduct)}"
             app:layout_constraintStart_toStartOf="@+id/container_pocket_info"
             app:layout_constraintTop_toBottomOf="@+id/textCurrentTitle" />
 
@@ -252,7 +252,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/asap_bold"
-            android:text="@{Formatter.INSTANCE.rupiahFormatter(homeVM.productLiveData.priceBuy)}"
+            android:text="@{@string/currency_format(homeVM.productLiveData.priceBuy)}"
             android:gravity="center"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/btnBuy"
@@ -265,7 +265,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/asap_bold"
-            android:text="@{Formatter.INSTANCE.rupiahFormatter(homeVM.productLiveData.priceSell)}"
+            android:text="@{@string/currency_format(homeVM.productLiveData.priceSell)}"
             android:textSize="20sp"
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@+id/btnSell"
@@ -305,6 +305,42 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textListOfPocket" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pokcetEmptyContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_pocket"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/rv_pocket"
+            app:layout_constraintTop_toTopOf="@+id/rv_pocket">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="53dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_not_found_handler"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textHistoryInfo" />
+
+            <TextView
+                android:id="@+id/textHistoryInfo"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/asap_bold"
+                android:gravity="center"
+                android:lines="3"
+                android:text="@string/oops_you_don_t_have_any_pocket_please_create_and_select_it_before_click_buy_or_sell"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/imageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

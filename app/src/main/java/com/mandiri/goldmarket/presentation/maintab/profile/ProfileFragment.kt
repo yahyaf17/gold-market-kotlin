@@ -8,30 +8,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.model.Customer
+import com.mandiri.goldmarket.data.db.AppDatabase
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
 import com.mandiri.goldmarket.databinding.FragmentProfileBinding
 import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
-import com.mandiri.goldmarket.utils.CustomSharedPreferences.Username
+import com.mandiri.goldmarket.utils.CustomSharedPreferences.ClearAll
+import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
 import com.mandiri.goldmarket.utils.EventResult
-import kotlinx.android.synthetic.main.fragment_profile.*
-
+import kotlin.properties.Delegates
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private lateinit var customerUsername: String
-    private lateinit var customerSelected: Customer
+    private var customerId by Delegates.notNull<Int>()
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return ProfileViewModel(CustomerRepositoryImpl(), PocketRepositoryImpl()) as T
+            val db = this@ProfileFragment.context?.let { AppDatabase.getDatabase(it) }
+            return ProfileViewModel(
+                CustomerRepositoryRoom(db!!),
+                PocketRepositoryRoom(db)
+            ) as T
         }
     }
     private val viewModel: ProfileViewModel by viewModels { factory }
@@ -39,8 +43,8 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPref = CustomSharedPreferences.customPreference(requireContext(), "Credentials")
-        customerUsername = sharedPref.Username.toString()
+        sharedPref = CustomSharedPreferences.credentialsPref(requireContext())
+        customerId = sharedPref.CustomerId
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
@@ -56,7 +60,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
-        viewModel.getProfileInfo(customerUsername)
+        viewModel.getProfileInfo(customerId)
 
         binding.apply {
             lifecycleOwner = this@ProfileFragment
@@ -64,10 +68,11 @@ class ProfileFragment : Fragment() {
             btnSignOut.setOnClickListener {
                 findNavController().navigate(R.id.action_profileFragment_to_onboardingActivity)
                 (activity as? MainTabActivity)?.finish()
+                sharedPref.ClearAll
             }
 
             btnEditProfile.setOnClickListener {
-                EditProfileDialog.newInstance(customerUsername).show(childFragmentManager, EditProfileDialog.TAG)
+                EditProfileDialog.newInstance(customerId).show(childFragmentManager, EditProfileDialog.TAG)
             }
 
         }
@@ -85,11 +90,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        profile_progressbar.visibility = View.VISIBLE
+        binding.profileProgressbar.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
-        profile_progressbar.visibility = View.GONE
+        binding.profileProgressbar.visibility = View.GONE
     }
 
     companion object {

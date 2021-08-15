@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_gold_market_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GoldMarket">
-        <activity android:name=".presentation.onboarding.onboard.OnboardingActivity"></activity>
+        <activity android:name=".presentation.onboarding.onboard.OnboardingActivity" />
         <activity android:name="com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity" />
         <activity android:name=".onboarding.RegisterActivity" />
         <activity android:name=".onboarding.LoginActivity" />
@@ -28,5 +28,3 @@
     </application>
 
 </manifest>
-
-<!--    android:configChanges="orientation|screenSize|keyboardHidden"-->

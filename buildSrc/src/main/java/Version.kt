@@ -9,4 +9,7 @@ object Version {
     const val navFragment = "2.3.5"
     const val navUi = "2.3.5"
     const val legacySupport = "4:1.0.0"
+    const val roomDb = "2.3.0"
+    const val coroutine = "1.5.0"
+    const val lifecycleVM = "2.3.1"
 }

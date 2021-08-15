@@ -1,15 +1,17 @@
 package com.mandiri.goldmarket.presentation.maintab.history
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.model.History
-import com.mandiri.goldmarket.data.repository.history.HistoryRepository
+import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryRoom
 import com.mandiri.goldmarket.utils.EventResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class HistoryViewModel(val repository: HistoryRepository): ViewModel() {
+class HistoryViewModel(val historyRepositoryRoom: HistoryRepositoryRoom): ViewModel() {
 
     private val _historyLiveData = MutableLiveData<List<History>>()
 
@@ -17,23 +19,17 @@ class HistoryViewModel(val repository: HistoryRepository): ViewModel() {
     val response: LiveData<EventResult>
         get() = _response
 
-    private fun getHistoryFromRepo() = repository.findAllHistory()
-
-    private fun updateHistoryObservable() {
-        _response.value = EventResult.Loading
-        Handler(Looper.getMainLooper()).postDelayed({
-            try {
-                val history = getHistoryFromRepo()
-                _historyLiveData.value = history
-                _response.value = EventResult.Success(history)
-            } catch (e: Exception) {
-                _response.value = EventResult.ErrorMessage("Can't load history")
-            }
-        }, 1000)
-
+    private fun updateHistoryObservable(customerId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _response.postValue(EventResult.Loading)
+            delay(1000)
+            val history = historyRepositoryRoom.getAllHistoryByCustomer(customerId)
+            _historyLiveData.postValue(history.get(0).history)
+            _response.postValue(EventResult.Success(history.get(0).history))
+        }
     }
 
-    fun getHistories() {
-        updateHistoryObservable()
+    fun getHistories(customerId: Int) {
+        updateHistoryObservable(customerId)
     }
 }

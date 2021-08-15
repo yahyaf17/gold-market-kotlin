@@ -34,10 +34,12 @@
     <string name="pocket_name">Pocket Name</string>
     <string name="welcome_home">Welcome, %1$s %2$s!</string>
     <string name="gram_format">%.2f gram</string>
+    <string name="currency_format">Rp %,.0f</string>
     <string name="pocket_type">Pocket type: %1$s</string>
     <string name="transaction">Transaction</string>
     <string name="submit_transaction">Submit Transaction</string>
     <string name="transaction_details">Transaction Details</string>
     <string name="enter_amount_in_gram">Enter amount in gram</string>
     <string name="input_amount_in_gram">Input Amount in Gram</string>
+    <string name="oops_you_don_t_have_any_pocket_please_create_and_select_it_before_click_buy_or_sell">Oops! You don\'t have any pocket. Please create and select it before click buy or sell</string>
 </resources>

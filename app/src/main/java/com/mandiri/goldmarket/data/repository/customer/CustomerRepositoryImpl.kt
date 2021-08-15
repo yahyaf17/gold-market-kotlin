@@ -4,10 +4,6 @@ import com.mandiri.goldmarket.data.model.Customer
 
 class CustomerRepositoryImpl: CustomerRepository {
 
-    override fun findAll(): List<Customer> {
-        return customerDb
-    }
-
     override fun findByUsername(username: String): Customer? {
         return customerDb.find { customer: Customer ->
             customer.username == username
@@ -38,7 +34,7 @@ class CustomerRepositoryImpl: CustomerRepository {
 
     companion object{
         var customerDb = mutableListOf(
-            Customer("tes", "tes", "tes@mail.com", "tes", "enigma")
+            Customer(1, "tes", "tes", "tes@mail.com", "tes", "enigma")
         )
     }
 }

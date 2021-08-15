@@ -20,7 +20,7 @@ class PocketRepositoryImpl: PocketRepository {
             name = newName
             amount = selectedPocket.amount
             totalPrice = selectedPocket.totalPrice
-            product = selectedPocket.product
+            pocketProduct = selectedPocket.pocketProduct
         }
         return selectedPocket
     }
@@ -29,8 +29,8 @@ class PocketRepositoryImpl: PocketRepository {
         return pocketDb.size
     }
 
-    override fun totalBalanceOfPocket(): BigDecimal {
-        var totalBalance = BigDecimal(0.0)
+    override fun totalBalanceOfPocket(): Double {
+        var totalBalance = 0.0
         pocketDb.forEach {
             totalBalance += it.totalPrice
         }
@@ -38,12 +38,12 @@ class PocketRepositoryImpl: PocketRepository {
     }
 
     override fun createNewPocket(name: String, product: String): Pocket {
-        val newPocket = Pocket(name, product, 0.0, BigDecimal(0))
+        val newPocket = Pocket(name = name, product = product, amount = 0.0, totalPrice = 0.0, pocketOwnerId = 1, pocketProduct = 1)
         pocketDb.add(newPocket)
         return newPocket
     }
 
-    override fun addPocketTransaction(pocket: String, trx: String, amount: Double, price: BigDecimal): Pocket {
+    override fun addPocketTransaction(pocket: String, trx: String, amount: Double, price: Double): Pocket {
         val selectedPocket = findById(pocket)
         if (trx == "Buy") {
             selectedPocket!!.amount += amount
@@ -59,10 +59,12 @@ class PocketRepositoryImpl: PocketRepository {
     companion object {
         var pocketDb = mutableListOf(
             Pocket(
-                "Grasberg",
-                "Gold",
-                3.1,
-                BigDecimal(2490000),
+                name = "Grasberg",
+                product = "Gold",
+                amount = 3.1,
+                totalPrice = 2490000.0,
+                pocketProduct = 1,
+                pocketOwnerId = 1
             ),
         )
     }

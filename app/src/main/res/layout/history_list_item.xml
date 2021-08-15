@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="16dp"
-                    android:text="@{Formatter.INSTANCE.rupiahFormatter(history.totalPrice)}"
+                    android:text="@{@string/currency_format(history.totalPrice)}"
                     android:textColor="@color/gm_primary"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"

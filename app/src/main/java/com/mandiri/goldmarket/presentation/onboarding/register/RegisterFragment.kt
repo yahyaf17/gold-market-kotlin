@@ -13,11 +13,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
+import com.mandiri.goldmarket.data.db.AppDatabase
 import com.mandiri.goldmarket.data.model.Customer
 import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
 import com.mandiri.goldmarket.databinding.FragmentRegisterBinding
 import com.mandiri.goldmarket.utils.ButtonUtils
-import kotlinx.android.synthetic.main.fragment_register.*
 
 
 class RegisterFragment : Fragment() {
@@ -25,7 +26,10 @@ class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return RegisterViewModel(CustomerRepositoryImpl()) as T
+            val db = this@RegisterFragment.context?.let { AppDatabase.getDatabase(it) }
+            return RegisterViewModel(
+                CustomerRepositoryImpl(),
+                CustomerRepositoryRoom(db!!)) as T
         }
     }
     private val viewModel: RegisterViewModel by viewModels { factory }
@@ -62,26 +66,28 @@ class RegisterFragment : Fragment() {
 
             bind.showPassRegister.setOnClickListener {
                 this.toggleOn = !this.toggleOn
-                ButtonUtils.showPasswordUtils(this.toggleOn, textRegisterPassword, showPassRegister)
+                ButtonUtils.showPasswordUtils(this.toggleOn, bind.textRegisterPassword, bind.showPassRegister)
             }
         }
     }
 
     private fun performRegister() {
-        if (textRegisterPassword.text.length < 5)  {
-            Toast.makeText(this.context, "Minimum password length 5 characters", Toast.LENGTH_SHORT).show()
-            throw Exception()
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(textEmail.text.toString()).matches()) {
-            Toast.makeText(this.context, "Email not valid", Toast.LENGTH_SHORT).show()
-            throw Exception()
-        } else {
-            viewModel.addCustomer(Customer(
-                textFirstName.text.toString(),
-                textLastName.text.toString(),
-                textEmail.text.toString(),
-                textUsernameRegister.text.toString(),
-                textRegisterPassword.text.toString(),
-            ))
+        binding.apply {
+            if (textRegisterPassword.text.length < 5)  {
+                Toast.makeText(this@RegisterFragment.context, "Minimum password length 5 characters", Toast.LENGTH_SHORT).show()
+                throw Exception()
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(textEmail.text.toString()).matches()) {
+                Toast.makeText(this@RegisterFragment.context, "Email not valid", Toast.LENGTH_SHORT).show()
+                throw Exception()
+            } else {
+                viewModel.registerCustomerRoom(Customer(
+                    firstName = textFirstName.text.toString(),
+                    lastName = textLastName.text.toString(),
+                    email = textEmail.text.toString(),
+                    username = textUsernameRegister.text.toString(),
+                    password = textRegisterPassword.text.toString(),
+                ))
+            }
         }
     }
 

@@ -10,6 +10,10 @@ object AppDependencies {
     private const val navFragment = "androidx.navigation:navigation-fragment-ktx:${Version.navFragment}"
     private const val navUi = "androidx.navigation:navigation-ui-ktx:${Version.navUi}"
     private const val legacySupport = "androidx.legacy:legacy-support-v${Version.legacySupport}"
+    private const val  roomDb = "androidx.room:room-runtime:${Version.roomDb}"
+    private const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutine}"
+    private const val lifecycleVM = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.lifecycleVM}"
+    private const val roomKtx = "androidx.room:room-ktx:2.3.0"
 
     val dependencies: Map<String, List<String>> = mapOf(
         "implementation" to listOf(
@@ -20,7 +24,11 @@ object AppDependencies {
             constraintLayout,
             navFragment,
             navUi,
-            legacySupport
+            legacySupport,
+            roomDb,
+            coroutine,
+            lifecycleVM,
+            roomKtx
         ),
         "testImplementation" to listOf(
             jUnit
