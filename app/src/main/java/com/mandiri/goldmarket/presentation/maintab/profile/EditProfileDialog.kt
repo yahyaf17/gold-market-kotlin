@@ -10,12 +10,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.model.Customer
+import com.mandiri.goldmarket.data.remote.request.customer.CustomerRequest
+import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
 import kotlin.properties.Delegates
 
 class EditProfileDialog: DialogFragment() {
 
-    private var customerId by Delegates.notNull<Int>()
-    private lateinit var customer: Customer
+    private lateinit var customerId: String
+    private lateinit var customer: CustomerResponse
     private lateinit var firstNameView: EditText
     private lateinit var lastNameView: EditText
     private val viewModel by lazy {
@@ -25,9 +27,9 @@ class EditProfileDialog: DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
-            customerId = this.getInt(USERNAME_EDIT)
+            customerId = this.getString(USERNAME_EDIT).toString()
         }
-        viewModel.value.findCustomerById(customerId)
+        viewModel.value.findCustomerById()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -45,16 +47,20 @@ class EditProfileDialog: DialogFragment() {
                 .setPositiveButton("Update",
                     DialogInterface.OnClickListener { _, _ ->
                         viewModel.value.updateCustomerData(
-                            Customer(
-                                customerId,
-                                firstNameView.text.toString(),
-                                lastNameView.text.toString(),
-                                customer.email,
-                                customer.username,
-                                customer.password
+                            CustomerRequest(
+                                id = customerId,
+                                firstName = firstNameView.text.toString(),
+                                lastName = lastNameView.text.toString(),
+                                email = customer.email,
+                                userName = customer.userName,
+                                userPassword = "null",
+                                address = customer.address,
+                                status = customer.status,
+                                dateOfBirth = customer.dateOfBirth,
+                                photoProfile = customer.photoProfile
                             )
                         )
-                        viewModel.value.getProfileInfo(customerId)
+                        viewModel.value.getProfileInfo(1)
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { _, _ ->
@@ -69,9 +75,9 @@ class EditProfileDialog: DialogFragment() {
 
         private const val USERNAME_EDIT = "customer"
 
-        fun newInstance(id: Int) = EditProfileDialog().apply {
+        fun newInstance(id: String) = EditProfileDialog().apply {
             arguments = Bundle().apply {
-                putInt(USERNAME_EDIT, id)
+                putString(USERNAME_EDIT, id)
             }
         }
     }

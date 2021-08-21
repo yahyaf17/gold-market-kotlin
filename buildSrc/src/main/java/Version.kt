@@ -12,4 +12,7 @@ object Version {
     const val roomDb = "2.3.0"
     const val coroutine = "1.5.0"
     const val lifecycleVM = "2.3.1"
+    const val roomKtx = "2.3.0"
+    const val retrofit = "2.9.0"
+    const val moshi = "2.4.0"
 }

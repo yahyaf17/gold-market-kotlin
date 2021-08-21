@@ -1,7 +1,6 @@
 package com.mandiri.goldmarket.presentation.onboarding.login
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,15 +16,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.db.AppDatabase
-import com.mandiri.goldmarket.data.model.Customer
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
+import com.mandiri.goldmarket.data.remote.RetrofitInstance
+import com.mandiri.goldmarket.data.remote.response.auth.LoginResponse
+import com.mandiri.goldmarket.data.repository.retrofit.AuthRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentLoginBinding
 import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
 import com.mandiri.goldmarket.presentation.onboarding.onboard.OnboardingActivity
 import com.mandiri.goldmarket.utils.ButtonUtils
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
-import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
 import com.mandiri.goldmarket.utils.EventResult
 import kotlin.properties.Delegates
 
@@ -34,18 +32,14 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val db = this@LoginFragment.context?.let { AppDatabase.getDatabase(it) }
-            return LoginViewModel(CustomerRepositoryRoom(db!!)) as T
+            val sharedPreferences = CustomSharedPreferences(requireContext())
+            val dataSoure = RetrofitInstance(sharedPreferences).authApi
+            val repository = AuthRetrofitRepository(dataSoure, sharedPreferences)
+            return LoginViewModel(repository) as T
         }
     }
     private val viewModel: LoginViewModel by viewModels { factory }
     private var toggleOn by Delegates.notNull<Boolean>()
-    private lateinit var sharedPref: SharedPreferences
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedPref = CustomSharedPreferences.credentialsPref(requireContext())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +62,7 @@ class LoginFragment : Fragment() {
             btnLogin.isEnabled = false
             val textEdits = listOf(textLoginUsername, textLoginPassword)
             disableLoginBtn(textEdits)
+
             btnLogin.setOnClickListener {
                 viewModel.loginCustomerRoom(
                     textLoginUsername.text.toString(),
@@ -109,12 +104,12 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun moveToHome(customer: Customer?) {
+    private fun moveToHome(customer: LoginResponse?) {
         val thisActivity = (activity as OnboardingActivity)
         val intent = Intent(thisActivity, MainTabActivity::class.java)
+        val sharedPref = CustomSharedPreferences(requireContext())
         customer?.let {
-//            sharedPref.Username = binding.textLoginUsername.text.toString()
-            sharedPref.CustomerId = customer.customerId
+            sharedPref.setValue(CustomSharedPreferences.Key.USER_ID, 1)
             startActivity(intent)
             thisActivity.finish()
         } ?: Toast.makeText(this@LoginFragment.context, "Wrong password or account not registered", Toast.LENGTH_LONG).show()
@@ -132,7 +127,7 @@ class LoginFragment : Fragment() {
                     }
                     is EventResult.Success -> {
                         hideProgressBar()
-                        moveToHome(it.data as Customer)
+                        moveToHome(it.data as LoginResponse)
                     }
                     else -> hideProgressBar()
                 }

@@ -1,20 +1,18 @@
 package com.mandiri.goldmarket.presentation.onboarding.register
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mandiri.goldmarket.data.model.Customer
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepository
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
+import com.mandiri.goldmarket.data.remote.request.auth.RegisterRequest
+import com.mandiri.goldmarket.data.repository.retrofit.AuthRetrofitRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RegisterViewModel(private val roomRepository: CustomerRepositoryRoom
+class RegisterViewModel(private val authRepository: AuthRetrofitRepository
 ): ViewModel() {
 
-    fun registerCustomerRoom(customer: Customer) {
+    fun registerCustomerRoom(request: RegisterRequest) {
         viewModelScope.launch(Dispatchers.IO) {
-            roomRepository.registerCustomer(customer)
+            authRepository.register(request)
         }
     }
 

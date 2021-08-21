@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mandiri.goldmarket.data.model.Pocket
+import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.databinding.PocketListItemBinding
 import com.mandiri.goldmarket.utils.Formatter
 
 class HomePocketAdapter(private val onClickListener: OnClickItem): RecyclerView.Adapter<HomePocketAdapter.HomePocketViewHolder>() {
 
-    private var pockets = mutableListOf<Pocket>()
+    private var pockets = mutableListOf<PocketResponse>()
 
     inner class HomePocketViewHolder(val binding: PocketListItemBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -29,7 +30,7 @@ class HomePocketAdapter(private val onClickListener: OnClickItem): RecyclerView.
         return pockets.size
     }
 
-    fun updateData(pocket: List<Pocket>?) {
+    fun updateData(pocket: List<PocketResponse>?) {
         pockets.clear()
         if (pocket != null) {
             pockets.addAll(pocket)

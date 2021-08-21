@@ -3,14 +3,12 @@ package com.mandiri.goldmarket.presentation.maintab.history
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.model.History
+import com.mandiri.goldmarket.data.remote.response.history.Content
 import com.mandiri.goldmarket.databinding.HistoryListItemBinding
-import com.mandiri.goldmarket.utils.Formatter
 
 class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
-    private var histories = mutableListOf<History>()
+    private var histories = mutableListOf<Content>()
 
     inner class HistoryViewHolder(val binding: HistoryListItemBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -27,7 +25,7 @@ class HistoryAdapter: RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
         return histories.size
     }
 
-    fun updateData(history: List<History>) {
+    fun updateData(history: List<Content>) {
         histories.clear()
         histories.addAll(history)
         notifyDataSetChanged()

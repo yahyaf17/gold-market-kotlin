@@ -13,7 +13,9 @@ object AppDependencies {
     private const val  roomDb = "androidx.room:room-runtime:${Version.roomDb}"
     private const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutine}"
     private const val lifecycleVM = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.lifecycleVM}"
-    private const val roomKtx = "androidx.room:room-ktx:2.3.0"
+    private const val roomKtx = "androidx.room:room-ktx:${Version.roomKtx}"
+    private const val retrofit = "com.squareup.retrofit2:retrofit:${Version.retrofit}"
+    private const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Version.moshi}"
 
     val dependencies: Map<String, List<String>> = mapOf(
         "implementation" to listOf(
@@ -28,7 +30,9 @@ object AppDependencies {
             roomDb,
             coroutine,
             lifecycleVM,
-            roomKtx
+            roomKtx,
+            retrofit,
+            moshiConverter
         ),
         "testImplementation" to listOf(
             jUnit

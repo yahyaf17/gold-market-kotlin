@@ -5,88 +5,90 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mandiri.goldmarket.data.model.Customer
-import com.mandiri.goldmarket.data.model.Pocket
-import com.mandiri.goldmarket.data.model.Product
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryImpl
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
-import com.mandiri.goldmarket.data.repository.product.ProductRepositoryImpl
+import com.mandiri.goldmarket.data.remote.request.pocket.Customer
+import com.mandiri.goldmarket.data.remote.request.pocket.PocketRequest
+import com.mandiri.goldmarket.data.remote.request.pocket.Product
+import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
+import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
+import com.mandiri.goldmarket.data.remote.response.product.ProductResponse
+import com.mandiri.goldmarket.data.repository.retrofit.CustomerReftorfitRepository
+import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
+import com.mandiri.goldmarket.data.repository.retrofit.ProductRetrofitRepository
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val productRepo: ProductRepositoryImpl,
-                    private val customerRepo: CustomerRepositoryRoom,
-                    private val pocketRoom: PocketRepositoryRoom
+class HomeViewModel(private val customerRepository: CustomerReftorfitRepository,
+                    private val productRepository: ProductRetrofitRepository,
+                    private val pocketRetrofit: PocketRetrofitRepository
 ): ViewModel() {
 
-    private var _customerLiveData = MutableLiveData<Customer>()
-    private var _totalBalanceLiveData = MutableLiveData<Double>()
-    private var _pocketSelectedLiveData = MutableLiveData<Pocket>()
-    private var _pocketsLiveData = MutableLiveData<List<Pocket>>()
-    private var _productLiveData = MutableLiveData<Product>()
+    private var _customerLiveData = MutableLiveData<CustomerResponse>()
+    private var _totalBalanceLiveData = MutableLiveData<Int>()
+    private var _pocketSelectedLiveData = MutableLiveData<PocketResponse>()
+    private var _pocketsLiveData = MutableLiveData<List<PocketResponse>>()
+    private var _productLiveData = MutableLiveData<ProductResponse>()
     private val _response = MutableLiveData<EventResult>(EventResult.Idle)
 
     val response: LiveData<EventResult>
         get() = _response
-    val customerLiveData: LiveData<Customer>
+    val customerLiveData: LiveData<CustomerResponse>
         get() = _customerLiveData
-    val totalBalanceLiveData: LiveData<Double>
+    val totalBalanceLiveData: LiveData<Int>
         get() = _totalBalanceLiveData
-    val pocketSelectedLiveData: LiveData<Pocket>
+    val pocketSelectedLiveData: LiveData<PocketResponse>
         get() = _pocketSelectedLiveData
-    val productLiveData: LiveData<Product>
+    val productLiveData: LiveData<ProductResponse>
         get() = _productLiveData
 
-    fun createNewPocketRoom(pocketName: String, custId: Int) {
+    fun createNewPocketRoom(pocketName: String, custId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            pocketRoom.createNewPocket(Pocket(
-                name = pocketName,
-                amount = 0.0,
-                product = "Gold",
-                totalPrice = 0.0,
-                pocketOwnerId = custId,
-                pocketProduct = 1
-            ))
+            pocketRetrofit.createPocket(PocketRequest(
+                pocketName = pocketName,
+                pocketQty = 0.0,
+                product = Product(1),
+                customer = Customer(custId),
+                totalAmount = 0)
+            )
         }
     }
 
 
-    private fun homeObservable(customerId: Int, productId: Int) {
+    private fun homeObservable(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _response.postValue(EventResult.Loading)
             delay(1000)
-            val customer = customerRepo.getCustomerById(customerId)
-            val totalBalance = pocketRoom.getTotalBalanceByCustomer(customerId)
-            val pockets = pocketRoom.findPocketByCustomer(customerId)
-            val product = productRepo.findProductById(productId)
+            val customer = customerRepository.findCustomerById()
+            val pockets = pocketRetrofit.getAllCustomerPockets()
+            val product = productRepository.getProductById(productId)
+            val totalBalance = pockets?.map { it.totalAmount }?.sum()
             if (customer == null) {
                 Log.d("HomeVM", "homeObserveable: Success")
                 _response.postValue(EventResult.ErrorMessage("Can't Retrieve Customer Data"))
                 return@launch
             }
             _customerLiveData.postValue(customer)
-            _totalBalanceLiveData.postValue(totalBalance ?: 0.0)
-            _pocketsLiveData.postValue(pockets?.get(0)?.pocket)
+            Log.d("HomeVM", "homeObservable: $customer")
+            _totalBalanceLiveData.postValue(totalBalance ?: 0)
+            _pocketsLiveData.postValue(pockets)
             _productLiveData.postValue(product)
-            _response.postValue(EventResult.Success(pockets?.get(0)?.pocket))
+            _response.postValue(EventResult.Success(pockets))
         }
     }
 
-    fun getHomeInfo(idCustomer: Int, productId: Int) {
-        homeObservable(idCustomer, productId)
+    fun getHomeInfo(productId: Int) {
+        homeObservable(productId)
     }
 
-    private fun getPocketSelected(idPocket: Int) {
+    private fun getPocketSelected(idPocket: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val pocketSelected = pocketRoom.findPocketById(idPocket)
+            val pocketSelected = pocketRetrofit.getPocketById(idPocket)
             _pocketSelectedLiveData.postValue(pocketSelected)
         }
     }
 
-    fun getCurrentPocket(idPocket: Int) {
+    fun getCurrentPocket(idPocket: String) {
         getPocketSelected(idPocket)
     }
 

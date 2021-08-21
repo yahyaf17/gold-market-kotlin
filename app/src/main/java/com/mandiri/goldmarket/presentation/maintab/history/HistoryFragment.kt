@@ -1,6 +1,5 @@
 package com.mandiri.goldmarket.presentation.maintab.history
 
-import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,33 +10,32 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mandiri.goldmarket.data.db.AppDatabase
-import com.mandiri.goldmarket.data.model.History
-import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryRoom
+import com.mandiri.goldmarket.data.remote.RetrofitInstance
+import com.mandiri.goldmarket.data.remote.response.history.Content
+import com.mandiri.goldmarket.data.repository.retrofit.HistoryRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentHistoryBinding
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
-import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
 import com.mandiri.goldmarket.utils.EventResult
 import kotlin.properties.Delegates
 
 class HistoryFragment : Fragment() {
 
     private lateinit var historyAdapter: HistoryAdapter
-    private lateinit var sharedPref: SharedPreferences
     private lateinit var binding: FragmentHistoryBinding
     private var customerId by Delegates.notNull<Int>()
     private val factory = object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val db = this@HistoryFragment.context?.let { AppDatabase.getDatabase(it) }
-            return HistoryViewModel(HistoryRepositoryRoom(db!!)) as T
+            val sharedPreferences = CustomSharedPreferences(requireContext())
+            val historyApi = RetrofitInstance(sharedPreferences).historyApi
+            return HistoryViewModel(HistoryRetrofitRepository(historyApi, sharedPreferences)) as T
         }
     }
     private val viewModel: HistoryViewModel by viewModels { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPref = CustomSharedPreferences.credentialsPref(requireContext())
-        customerId = sharedPref.CustomerId
+        val sharedPref = CustomSharedPreferences(requireContext())
+        customerId = sharedPref.retrieveInt(CustomSharedPreferences.Key.USER_ID)
     }
 
     override fun onCreateView(
@@ -53,7 +51,7 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
-        viewModel.getHistories(customerId)
+        viewModel.getHistories()
         binding.apply {
             lifecycleOwner = this@HistoryFragment
             rvHistory.apply {
@@ -70,15 +68,18 @@ class HistoryFragment : Fragment() {
                 is EventResult.Loading -> showProgressBar()
                 is EventResult.Success -> {
                     hideProgressBar()
-                    val histories = it.data as List<History>
+                    val histories = it.data as List<Content>
                     historyAdapter.updateData(it.data)
                     if (histories.isNotEmpty()) {
                         hideEmptyDataHandling()
-                    } else {
-                        showEmptyDataHandling()
+                        return@observe
                     }
+                    showEmptyDataHandling()
                 }
-                is EventResult.ErrorMessage -> hideProgressBar()
+                is EventResult.ErrorMessage -> {
+                    hideProgressBar()
+                    showEmptyDataHandling()
+                }
                 else -> EventResult.Idle
             }
         }

@@ -3,7 +3,6 @@ package com.mandiri.goldmarket.presentation.maintab.pocket
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
@@ -11,22 +10,19 @@ import androidx.fragment.app.viewModels
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.presentation.maintab.home.HomeViewModel
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
-import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
-import kotlin.properties.Delegates
 
 class NewPocketDialog: DialogFragment() {
 
     private lateinit var pocketNameText: EditText
-    private lateinit var sharedPref: SharedPreferences
-    private var customerId by Delegates.notNull<Int>()
+    private lateinit var customerId: String
     private val viewModel by lazy {
         requireParentFragment().viewModels<HomeViewModel>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPref = CustomSharedPreferences.credentialsPref(requireContext())
-        customerId = sharedPref.CustomerId
+        val sharedPref = CustomSharedPreferences(requireContext())
+        customerId = sharedPref.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID).toString()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -40,7 +36,7 @@ class NewPocketDialog: DialogFragment() {
                 .setPositiveButton("Create",
                     DialogInterface.OnClickListener { _, _ ->
                         viewModel.value.createNewPocketRoom(pocketNameText.text.toString(), customerId)
-                        viewModel.value.getHomeInfo(customerId, 1)
+                        viewModel.value.getHomeInfo(1)
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { _, _ ->

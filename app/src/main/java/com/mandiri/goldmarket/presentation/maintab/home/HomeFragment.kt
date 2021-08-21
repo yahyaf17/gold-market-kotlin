@@ -1,6 +1,5 @@
 package com.mandiri.goldmarket.presentation.maintab.home
 
-import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,30 +15,33 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.db.AppDatabase
-import com.mandiri.goldmarket.data.model.Pocket
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
+import com.mandiri.goldmarket.data.remote.RetrofitInstance
+import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
-import com.mandiri.goldmarket.data.repository.product.ProductRepositoryImpl
+import com.mandiri.goldmarket.data.repository.retrofit.CustomerReftorfitRepository
+import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
+import com.mandiri.goldmarket.data.repository.retrofit.ProductRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
 import com.mandiri.goldmarket.presentation.maintab.pocket.NewPocketDialog
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
-import com.mandiri.goldmarket.utils.CustomSharedPreferences.CustomerId
 import com.mandiri.goldmarket.utils.EventResult
 import kotlin.properties.Delegates
 
 class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
 
-    private lateinit var sharedPref: SharedPreferences
     private lateinit var binding: FragmentHomeBinding
     private var customerId by Delegates.notNull<Int>()
-    private lateinit var pockets: List<Pocket>
+    private lateinit var pockets: List<PocketResponse>
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val db = this@HomeFragment.context?.let { AppDatabase.getDatabase(it) }
+            val sharedPreferences = CustomSharedPreferences(requireContext())
+            val customerApi = RetrofitInstance(sharedPreferences).customerApi
+            val productApi = RetrofitInstance(sharedPreferences).productApi
+            val pocketApi = RetrofitInstance(sharedPreferences).pocketApi
             return HomeViewModel(
-                ProductRepositoryImpl(),
-                CustomerRepositoryRoom(db!!),
-                PocketRepositoryRoom(db)
+                CustomerReftorfitRepository(customerApi, sharedPreferences),
+                ProductRetrofitRepository(productApi),
+                PocketRetrofitRepository(pocketApi, sharedPreferences)
             ) as T
         }
     }
@@ -49,8 +51,8 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPref = CustomSharedPreferences.credentialsPref(requireContext())
-        customerId = sharedPref.CustomerId
+        val sharedPref = CustomSharedPreferences(requireContext())
+        customerId = sharedPref.retrieveInt(CustomSharedPreferences.Key.USER_ID)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
@@ -66,7 +68,7 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
-        viewModel.getHomeInfo(customerId, 1)
+        viewModel.getHomeInfo(1)
         binding.apply {
 
             // active when current pocket is showing
@@ -88,18 +90,20 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
             btnBuy.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_transactionFragment,
                     bundleOf(
-                        TRX_TYPE to "Buy",
-                        TRX_AMOUNT to viewModel.productLiveData.value!!.priceBuy,
-                        POCKET_SELECTED to viewModel.pocketSelectedLiveData.value?.pocketId
+                        TRX_TYPE to 1, //1 for Buy
+                        TRX_AMOUNT to viewModel.productLiveData.value!!.productPriceBuy,
+                        POCKET_SELECTED to viewModel.pocketSelectedLiveData.value?.id,
+                        PRODUCT_ID to viewModel.productLiveData.value!!.id
                     ))
             }
 
             btnSell.setOnClickListener {
                 findNavController().navigate(R.id.action_homeFragment_to_transactionFragment,
                     bundleOf(
-                        TRX_TYPE to "Sell",
-                        TRX_AMOUNT to viewModel.productLiveData.value!!.priceSell,
-                        POCKET_SELECTED to viewModel.pocketSelectedLiveData.value?.pocketId
+                        TRX_TYPE to 0, // 0 for Sell
+                        TRX_AMOUNT to viewModel.productLiveData.value!!.productPriceSell,
+                        POCKET_SELECTED to viewModel.pocketSelectedLiveData.value?.id,
+                        PRODUCT_ID to viewModel.productLiveData.value!!.id
                     ))
             }
 
@@ -119,7 +123,7 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
                 is EventResult.Loading -> showProgressBar()
                 is EventResult.Success -> {
                     hideProgressBar()
-                    pockets = it.data as List<Pocket>
+                    pockets = it.data as List<PocketResponse>
                     if (pockets.isEmpty()) {
                         showEmptyDataHandling()
                         return@observe
@@ -147,7 +151,7 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
             btnSell.isEnabled = true
             alertPickPocket.visibility = View.GONE
         }
-        viewModel.getCurrentPocket(pockets[position].pocketId)
+        viewModel.getCurrentPocket(pockets[position].id)
     }
 
     private fun showEmptyDataHandling() {
@@ -159,9 +163,10 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     }
 
     companion object {
-        const val TRX_TYPE = "TRX_TYPE"
+        const val TRX_TYPE = "2"
         const val TRX_AMOUNT = "1"
         const val POCKET_SELECTED = "0"
+        const val PRODUCT_ID = "productId"
     }
 
 }

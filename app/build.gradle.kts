@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -16,6 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField("String", "BASE_URL", "${project.properties.get("api")}")
     }
 
     buildFeatures{
@@ -24,6 +29,7 @@ android {
 
     buildTypes {
         getByName("release") {
+//            buildConfigField("String", "BASE_URL", baseUrl)
             isMinifyEnabled = false
             proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"

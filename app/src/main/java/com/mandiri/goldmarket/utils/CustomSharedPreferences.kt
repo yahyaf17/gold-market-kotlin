@@ -3,50 +3,32 @@ package com.mandiri.goldmarket.utils
 import android.content.Context
 import android.content.SharedPreferences
 
-object CustomSharedPreferences {
+class CustomSharedPreferences(context: Context) {
 
-    fun credentialsPref(context: Context): SharedPreferences = context.getSharedPreferences("CREDENTIALS", Context.MODE_PRIVATE)
+    val credentialsPref: SharedPreferences = context.getSharedPreferences("CREDENTIALS", Context.MODE_PRIVATE)
 
-    fun setUsername(context: Context, username: String) {
-        credentialsPref(context).edit()?.putString("username", username)?.apply()
+    fun clearAll() {
+        credentialsPref.edit().clear().apply()
     }
 
-    val SharedPreferences.ClearAll
-        get() = edit().clear().apply()
+    fun setValue(key: Key, value: Any) {
+        if (value is String) {
+            credentialsPref.edit().putString(key.toString(), value).apply()
+        }
+        if (value is Int) {
+            credentialsPref.edit().putInt(key.toString(), value).apply()
+        }
+    }
 
-    var SharedPreferences.Username
-        get() = getString("username", "tes")
-        set(value) = edit().putString("username", value).apply()
+    fun retrieveString(key: Key): String? {
+        return credentialsPref.getString(key.toString(), null)
+    }
 
-    var SharedPreferences.CustomerId
-        get() = getInt("user_id", 1)
-        set(value) = edit().putInt("user_id", value).apply()
+    fun retrieveInt(key: Key): Int {
+        return credentialsPref.getInt(key.toString(), 0)
+    }
 
-    var SharedPreferences.PocketId
-        get() = getInt("pocket_id", 0)
-        set(value) = edit().putInt("pocket_id", value).apply()
-
-//    var CustomSharedPreferences.userId
-//        get() = getInt(USER_ID, 0)
-//        set(value) {
-//            editMe {
-//                it.putString(USER_ID, value)
-//            }
-//        }
-//
-//    var CustomSharedPreferences.password
-//        get() = getString(USER_PASSWORD, "")
-//        set(value) {
-//            editMe {
-//                it.putString(USER_PASSWORD, value)
-//            }
-//        }
-//
-//    var CustomSharedPreferences.clearValues
-//        get() = { }
-//        set(value) {
-//            editMe {
-//                it.clear()
-//            }
-//        }
+    enum class Key {
+        TOKEN, USER_ID, POCKET_ID, CUSTOMER_ID
+    }
 }

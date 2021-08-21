@@ -13,12 +13,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.db.AppDatabase
-import com.mandiri.goldmarket.data.model.Customer
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryImpl
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
+import com.mandiri.goldmarket.data.remote.RetrofitInstance
+import com.mandiri.goldmarket.data.remote.request.auth.RegisterRequest
+import com.mandiri.goldmarket.data.repository.retrofit.AuthRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentRegisterBinding
 import com.mandiri.goldmarket.utils.ButtonUtils
+import com.mandiri.goldmarket.utils.CustomSharedPreferences
+import java.util.*
 
 
 class RegisterFragment : Fragment() {
@@ -26,13 +27,14 @@ class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
     private  val factory =  object: ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val db = this@RegisterFragment.context?.let { AppDatabase.getDatabase(it) }
-            return RegisterViewModel(CustomerRepositoryRoom(db!!)) as T
+            val sharedPreferences = CustomSharedPreferences(requireContext())
+            val dataSoure = RetrofitInstance(sharedPreferences).authApi
+            val repository = AuthRetrofitRepository(dataSoure, sharedPreferences)
+            return RegisterViewModel(repository) as T
         }
     }
     private val viewModel: RegisterViewModel by viewModels { factory }
     private var toggleOn: Boolean = false
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,13 +80,20 @@ class RegisterFragment : Fragment() {
                 Toast.makeText(this@RegisterFragment.context, "Email not valid", Toast.LENGTH_SHORT).show()
                 throw Exception()
             } else {
-                viewModel.registerCustomerRoom(Customer(
-                    firstName = textFirstName.text.toString(),
-                    lastName = textLastName.text.toString(),
-                    email = textEmail.text.toString(),
-                    username = textUsernameRegister.text.toString(),
-                    password = textRegisterPassword.text.toString(),
-                ))
+                with(viewModel) {
+                    registerCustomerRoom(
+                        RegisterRequest(
+                                address = "address",
+                                dateOfBirth ="2020-07-05T09:27:37Z",
+                                status = 1,
+                                role = listOf("ROLE_USER"),
+                                firstName = textFirstName.text.toString(),
+                                lastName = textLastName.text.toString(),
+                                email = textEmail.text.toString(),
+                                userName = textUsernameRegister.text.toString(),
+                                userPassword = textRegisterPassword.text.toString())
+                            )
+                }
             }
         }
     }

@@ -7,7 +7,7 @@
         <import type="com.mandiri.goldmarket.utils.Formatter"/>
         <variable
             name="pocket"
-            type="com.mandiri.goldmarket.data.model.Pocket" />
+            type="com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse" />
         <variable
             name="onClick"
             type="com.mandiri.goldmarket.presentation.maintab.home.HomePocketAdapter.OnClickItem" />
@@ -55,7 +55,7 @@
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/asap_bold"
                     android:gravity="center"
-                    android:text="@{pocket.name}"
+                    android:text="@{pocket.pocketName}"
                     android:textColor="@color/gm_white"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/asap_bold"
-                    android:text="@{@string/gram_format(pocket.amount)}"
+                    android:text="@{@string/gram_format(pocket.pocketQty)}"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/asap_bold"
-                    android:text="@{Formatter.INSTANCE.rupiahFormatter(pocket.totalPrice)}"
+                    android:text="@{@string/currency_format(pocket.totalAmount)}"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +94,7 @@
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/asap"
                     android:gravity="center"
-                    android:text="@{pocket.product}"
+                    productCode="@{pocket.product.id}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
