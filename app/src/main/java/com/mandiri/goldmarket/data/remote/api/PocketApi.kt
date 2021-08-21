@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.data.remote.api.pocket
+package com.mandiri.goldmarket.data.remote.api
 
 import com.mandiri.goldmarket.data.remote.request.pocket.PocketRequest
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse

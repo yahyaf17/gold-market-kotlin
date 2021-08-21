@@ -1,14 +1,14 @@
-package com.mandiri.goldmarket.data.repository.retrofit
+package com.mandiri.goldmarket.data.repository.product
 
 import android.util.Log
-import com.mandiri.goldmarket.data.remote.api.product.ProductApi
+import com.mandiri.goldmarket.data.remote.api.ProductApi
 import com.mandiri.goldmarket.data.remote.response.product.ProductResponse
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
-class ProductRetrofitRepository(private val productApi: ProductApi) {
+class ProductRetrofitRepository(private val productApi: ProductApi): ProductRepository {
 
-    suspend fun getProductById(productId: Int): ProductResponse? {
+    override suspend fun getProductById(productId: Int): ProductResponse? {
         return try {
             withTimeout(7000) {
                 val response = productApi.getProductById(productId)

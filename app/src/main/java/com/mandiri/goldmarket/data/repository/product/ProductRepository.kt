@@ -1,7 +1,7 @@
 package com.mandiri.goldmarket.data.repository.product
 
-import com.mandiri.goldmarket.data.model.Product
+import com.mandiri.goldmarket.data.remote.response.product.ProductResponse
 
 interface ProductRepository {
-    fun findProductById(id: Int): Product?
+    suspend fun getProductById(productId: Int): ProductResponse?
 }

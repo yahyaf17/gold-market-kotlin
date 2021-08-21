@@ -1,14 +1,12 @@
 package com.mandiri.goldmarket.data.repository.pocket
 
 import com.mandiri.goldmarket.data.model.Pocket
+import com.mandiri.goldmarket.data.remote.request.pocket.PocketRequest
+import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import java.math.BigDecimal
 
 interface PocketRepository {
-    fun findAll(): List<Pocket>
-    fun findById(pocketName: String): Pocket?
-    fun editPocket(pocketName: String, newName: String): Pocket
-    fun countPocket(): Int
-    fun totalBalanceOfPocket(): Double
-    fun createNewPocket(name: String, product: String): Pocket
-    fun addPocketTransaction(pocket: String, trx: String, amount: Double, price: Double): Pocket
+    suspend fun createPocket(request: PocketRequest): PocketResponse?
+    suspend fun getPocketById(pocketId: String): PocketResponse?
+    suspend fun getAllCustomerPockets(): List<PocketResponse>?
 }

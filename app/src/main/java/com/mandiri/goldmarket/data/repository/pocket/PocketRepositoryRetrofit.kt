@@ -1,17 +1,17 @@
-package com.mandiri.goldmarket.data.repository.retrofit
+package com.mandiri.goldmarket.data.repository.pocket
 
 import android.util.Log
-import com.mandiri.goldmarket.data.remote.api.pocket.PocketApi
+import com.mandiri.goldmarket.data.remote.api.PocketApi
 import com.mandiri.goldmarket.data.remote.request.pocket.PocketRequest
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
-class PocketRetrofitRepository(private val pocketApi: PocketApi,
-                               private val sharedPreferences: CustomSharedPreferences) {
+class PocketRepositoryRetrofit(private val pocketApi: PocketApi,
+                               private val sharedPreferences: CustomSharedPreferences): PocketRepository {
 
-    suspend fun createPocket(request: PocketRequest): PocketResponse? {
+    override suspend fun createPocket(request: PocketRequest): PocketResponse? {
         return try {
             withTimeout(7000) {
                 val response = pocketApi.createPocket(request)
@@ -28,7 +28,7 @@ class PocketRetrofitRepository(private val pocketApi: PocketApi,
         }
     }
 
-    suspend fun getPocketById(pocketId: String): PocketResponse? {
+    override suspend fun getPocketById(pocketId: String): PocketResponse? {
         return try {
             withTimeout(7000) {
                 val response = pocketApi.findPocketById(pocketId)
@@ -45,7 +45,7 @@ class PocketRetrofitRepository(private val pocketApi: PocketApi,
         }
     }
 
-    suspend fun getAllCustomerPockets(): List<PocketResponse>? {
+    override suspend fun getAllCustomerPockets(): List<PocketResponse>? {
         return try {
             withTimeout(7000) {
                 val customerId = sharedPreferences.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)

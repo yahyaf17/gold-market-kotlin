@@ -1,18 +1,18 @@
-package com.mandiri.goldmarket.data.repository.retrofit
+package com.mandiri.goldmarket.data.repository.customer
 
 import android.util.Log
-import com.mandiri.goldmarket.data.remote.api.customer.CustomerApi
+import com.mandiri.goldmarket.data.remote.api.CustomerApi
 import com.mandiri.goldmarket.data.remote.request.customer.CustomerRequest
 import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
-class CustomerReftorfitRepository(private val customerApi: CustomerApi,
-                                  private val sharedPref: CustomSharedPreferences
-) {
+class CustomerRepositoryRetrofit(private val customerApi: CustomerApi,
+                                 private val sharedPref: CustomSharedPreferences
+): CustomerRepository {
 
-    suspend fun findCustomerById(): CustomerResponse? {
+    override suspend fun findCustomerById(): CustomerResponse? {
         return try {
             withTimeout(7000) {
                 val customerId = sharedPref.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)
@@ -30,7 +30,7 @@ class CustomerReftorfitRepository(private val customerApi: CustomerApi,
         }
     }
 
-    suspend fun updateCustomerData(customerRequest: CustomerRequest): CustomerResponse? {
+    override suspend fun updateCustomerData(customerRequest: CustomerRequest): CustomerResponse? {
         return try {
             withTimeout(7000) {
                 val response = customerApi.updateCustomerData(customerRequest)

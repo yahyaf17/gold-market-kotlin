@@ -29,6 +29,6 @@ class CustomSharedPreferences(context: Context) {
     }
 
     enum class Key {
-        TOKEN, USER_ID, POCKET_ID, CUSTOMER_ID
+        TOKEN, USER_ID, CUSTOMER_ID
     }
 }

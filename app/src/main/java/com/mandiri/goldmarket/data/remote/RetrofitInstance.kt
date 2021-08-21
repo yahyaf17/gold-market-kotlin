@@ -1,12 +1,12 @@
 package com.mandiri.goldmarket.data.remote
 
 import com.mandiri.goldmarket.BuildConfig
-import com.mandiri.goldmarket.data.remote.api.transaction.TransactionApi
-import com.mandiri.goldmarket.data.remote.api.auth.AuthApi
-import com.mandiri.goldmarket.data.remote.api.customer.CustomerApi
-import com.mandiri.goldmarket.data.remote.api.history.HistoryApi
-import com.mandiri.goldmarket.data.remote.api.pocket.PocketApi
-import com.mandiri.goldmarket.data.remote.api.product.ProductApi
+import com.mandiri.goldmarket.data.remote.api.TransactionApi
+import com.mandiri.goldmarket.data.remote.api.AuthApi
+import com.mandiri.goldmarket.data.remote.api.CustomerApi
+import com.mandiri.goldmarket.data.remote.api.HistoryApi
+import com.mandiri.goldmarket.data.remote.api.PocketApi
+import com.mandiri.goldmarket.data.remote.api.ProductApi
 import com.mandiri.goldmarket.data.remote.interceptor.AuthTokenInterceptor
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import okhttp3.OkHttpClient

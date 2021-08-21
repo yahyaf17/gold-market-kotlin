@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.remote.response.history.Content
-import com.mandiri.goldmarket.data.repository.retrofit.HistoryRetrofitRepository
+import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryRetrofit
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HistoryViewModel(val historyRetrofitRepository: HistoryRetrofitRepository): ViewModel() {
+class HistoryViewModel(val historyRetrofitRepository: HistoryRepositoryRetrofit): ViewModel() {
 
     private val _historyLiveData = MutableLiveData<List<Content>>()
 

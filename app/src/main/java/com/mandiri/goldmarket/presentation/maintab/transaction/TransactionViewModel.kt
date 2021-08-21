@@ -9,18 +9,16 @@ import com.mandiri.goldmarket.data.remote.request.pocket.Product
 import com.mandiri.goldmarket.data.remote.request.transaction.Purchase
 import com.mandiri.goldmarket.data.remote.request.transaction.PurchaseDetail
 import com.mandiri.goldmarket.data.remote.request.transaction.TransactionRequest
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
-import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.TransactionRetrofitRepository
-import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRoom
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRetrofit
 import com.mandiri.goldmarket.presentation.maintab.home.HomeFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TransactionViewModel(private val pocketRetrofitRepository: PocketRetrofitRepository,
-                           private val transactionRetrofitRepository: TransactionRetrofitRepository
+class TransactionViewModel(private val pocketRetrofitRepository: PocketRepositoryRetrofit,
+                           private val transactionRetrofitRepository: TransactionRepositoryRetrofit
 ): ViewModel() {
 
     var transactionType: Int = HomeFragment.TRX_TYPE.toInt()

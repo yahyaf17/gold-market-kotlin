@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.data.remote.api.auth
+package com.mandiri.goldmarket.data.remote.api
 
 import com.mandiri.goldmarket.data.remote.request.auth.LoginRequest
 import com.mandiri.goldmarket.data.remote.request.auth.RegisterRequest

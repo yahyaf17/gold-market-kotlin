@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.data.remote.api.product
+package com.mandiri.goldmarket.data.remote.api
 
 import com.mandiri.goldmarket.data.remote.response.product.ProductResponse
 import retrofit2.Response

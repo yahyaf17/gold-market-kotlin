@@ -1,6 +1,5 @@
 package com.mandiri.goldmarket.presentation.maintab.transaction
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,12 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.db.AppDatabase
 import com.mandiri.goldmarket.data.remote.RetrofitInstance
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
-import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.TransactionRetrofitRepository
-import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRoom
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRetrofit
 import com.mandiri.goldmarket.databinding.FragmentTransactionBinding
 import com.mandiri.goldmarket.presentation.maintab.home.HomeFragment
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
@@ -39,8 +35,8 @@ class TransactionFragment : Fragment() {
             val pocketapi = RetrofitInstance(sharedPreferences).pocketApi
             val transactionApi = RetrofitInstance(sharedPreferences).transactionApi
             return TransactionViewModel(
-                PocketRetrofitRepository(pocketapi, sharedPreferences),
-                TransactionRetrofitRepository(transactionApi)
+                PocketRepositoryRetrofit(pocketapi, sharedPreferences),
+                TransactionRepositoryRetrofit(transactionApi)
             ) as T
         }
     }

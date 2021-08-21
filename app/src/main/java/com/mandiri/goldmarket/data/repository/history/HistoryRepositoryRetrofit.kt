@@ -1,16 +1,16 @@
-package com.mandiri.goldmarket.data.repository.retrofit
+package com.mandiri.goldmarket.data.repository.history
 
 import android.util.Log
-import com.mandiri.goldmarket.data.remote.api.history.HistoryApi
+import com.mandiri.goldmarket.data.remote.api.HistoryApi
 import com.mandiri.goldmarket.data.remote.response.history.Content
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
-class HistoryRetrofitRepository(private val historyApi: HistoryApi,
-                                private val sharedPreferences: CustomSharedPreferences) {
+class HistoryRepositoryRetrofit(private val historyApi: HistoryApi,
+                                private val sharedPreferences: CustomSharedPreferences): HistoryRepository {
 
-    suspend fun getCustomerHistory(): List<Content>? {
+    override suspend fun getCustomerHistory(): List<Content>? {
         return try {
             withTimeout(20000) {
                 val customerId = sharedPreferences.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)

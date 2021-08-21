@@ -5,20 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mandiri.goldmarket.data.model.Customer
 import com.mandiri.goldmarket.data.remote.request.customer.CustomerRequest
 import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRoom
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
-import com.mandiri.goldmarket.data.repository.retrofit.CustomerReftorfitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val customerReftorfitRepository: CustomerReftorfitRepository,
-                       private val pocketRetrofitRepository: PocketRetrofitRepository,
+class ProfileViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit,
+                       private val pocketRetrofitRepository: PocketRepositoryRetrofit,
 ): ViewModel() {
 
     private val _customerLiveData = MutableLiveData<CustomerResponse>()
@@ -38,14 +35,14 @@ class ProfileViewModel(private val customerReftorfitRepository: CustomerReftorfi
 
     fun findCustomerById() {
         viewModelScope.launch(Dispatchers.IO) {
-            val customer = customerReftorfitRepository.findCustomerById()
+            val customer = customerRepoRetrofit.findCustomerById()
             _customerLiveData.postValue(customer)
         }
     }
 
     fun updateCustomerData(customer: CustomerRequest) {
         viewModelScope.launch(Dispatchers.IO) {
-            customerReftorfitRepository.updateCustomerData(customer)
+            customerRepoRetrofit.updateCustomerData(customer)
         }
     }
 
@@ -53,7 +50,7 @@ class ProfileViewModel(private val customerReftorfitRepository: CustomerReftorfi
         viewModelScope.launch(Dispatchers.IO) {
             _response.postValue(EventResult.Loading)
             delay(1000)
-            val customer = customerReftorfitRepository.findCustomerById()
+            val customer = customerRepoRetrofit.findCustomerById()
             if (customer == null) {
                 _response.postValue(EventResult.ErrorMessage("Can't Retrieve Customer Data"))
                 Log.d("CustomerVM", "getCustomerInfo: Error")

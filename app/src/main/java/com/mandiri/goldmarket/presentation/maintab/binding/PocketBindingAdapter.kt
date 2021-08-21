@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.presentation.maintab.pocket
+package com.mandiri.goldmarket.presentation.maintab.binding
 
 import android.widget.ImageView
 import android.widget.TextView

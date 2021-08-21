@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.remote.request.auth.LoginRequest
-import com.mandiri.goldmarket.data.repository.retrofit.AuthRetrofitRepository
+import com.mandiri.goldmarket.data.repository.auth.AuthRetrofitRepository
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

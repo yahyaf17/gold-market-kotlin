@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.data.remote.api.transaction
+package com.mandiri.goldmarket.data.remote.api
 
 import com.mandiri.goldmarket.data.remote.request.transaction.TransactionRequest
 import com.mandiri.goldmarket.data.remote.response.transaction.TransactionResponse

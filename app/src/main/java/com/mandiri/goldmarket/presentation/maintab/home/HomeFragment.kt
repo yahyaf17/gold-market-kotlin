@@ -14,13 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.db.AppDatabase
 import com.mandiri.goldmarket.data.remote.RetrofitInstance
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRoom
-import com.mandiri.goldmarket.data.repository.retrofit.CustomerReftorfitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.ProductRetrofitRepository
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.product.ProductRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
 import com.mandiri.goldmarket.presentation.maintab.pocket.NewPocketDialog
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
@@ -39,9 +37,9 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
             val productApi = RetrofitInstance(sharedPreferences).productApi
             val pocketApi = RetrofitInstance(sharedPreferences).pocketApi
             return HomeViewModel(
-                CustomerReftorfitRepository(customerApi, sharedPreferences),
+                CustomerRepositoryRetrofit(customerApi, sharedPreferences),
                 ProductRetrofitRepository(productApi),
-                PocketRetrofitRepository(pocketApi, sharedPreferences)
+                PocketRepositoryRetrofit(pocketApi, sharedPreferences)
             ) as T
         }
     }

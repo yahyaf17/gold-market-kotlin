@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.remote.RetrofitInstance
 import com.mandiri.goldmarket.data.remote.request.auth.RegisterRequest
-import com.mandiri.goldmarket.data.repository.retrofit.AuthRetrofitRepository
+import com.mandiri.goldmarket.data.repository.auth.AuthRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentRegisterBinding
 import com.mandiri.goldmarket.utils.ButtonUtils
 import com.mandiri.goldmarket.utils.CustomSharedPreferences

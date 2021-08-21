@@ -1,17 +1,17 @@
-package com.mandiri.goldmarket.data.repository.retrofit
+package com.mandiri.goldmarket.data.repository.transaction
 
 import android.util.Log
-import com.mandiri.goldmarket.data.remote.api.transaction.TransactionApi
+import com.mandiri.goldmarket.data.remote.api.TransactionApi
 import com.mandiri.goldmarket.data.remote.request.transaction.TransactionRequest
 import com.mandiri.goldmarket.data.remote.response.transaction.TransactionResponse
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
 
-class TransactionRetrofitRepository(private val transactionApi: TransactionApi) {
+class TransactionRepositoryRetrofit(private val transactionApi: TransactionApi): TransactionRepository {
 
-    suspend fun performTransaction(request: TransactionRequest): TransactionResponse? {
+    override suspend fun performTransaction(request: TransactionRequest): TransactionResponse? {
         return try {
-//            withTimeout(200000000) {
+            withTimeout(7000) {
                 val response = transactionApi.performTransaction(request)
                 if (response.isSuccessful) {
                     Log.d("TransactionRepo", "TransactionSuccess: ${response.body()}")
@@ -19,7 +19,7 @@ class TransactionRetrofitRepository(private val transactionApi: TransactionApi) 
                 } else {
                     null
                 }
-//            }
+            }
         } catch (e: Exception) {
             Log.d("TransactionRepo", "TransactionFailed: ${e.localizedMessage}")
             null

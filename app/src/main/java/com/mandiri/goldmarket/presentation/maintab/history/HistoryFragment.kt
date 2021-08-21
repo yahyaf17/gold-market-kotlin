@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mandiri.goldmarket.data.remote.RetrofitInstance
 import com.mandiri.goldmarket.data.remote.response.history.Content
-import com.mandiri.goldmarket.data.repository.retrofit.HistoryRetrofitRepository
+import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryRetrofit
 import com.mandiri.goldmarket.databinding.FragmentHistoryBinding
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.EventResult
@@ -27,7 +27,7 @@ class HistoryFragment : Fragment() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val sharedPreferences = CustomSharedPreferences(requireContext())
             val historyApi = RetrofitInstance(sharedPreferences).historyApi
-            return HistoryViewModel(HistoryRetrofitRepository(historyApi, sharedPreferences)) as T
+            return HistoryViewModel(HistoryRepositoryRetrofit(historyApi, sharedPreferences)) as T
         }
     }
     private val viewModel: HistoryViewModel by viewModels { factory }

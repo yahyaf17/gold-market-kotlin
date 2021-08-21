@@ -1,4 +1,4 @@
-package com.mandiri.goldmarket.data.remote.api.history
+package com.mandiri.goldmarket.data.remote.api
 
 import com.mandiri.goldmarket.data.remote.response.history.HistoriesResponse
 import retrofit2.Response

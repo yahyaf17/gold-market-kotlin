@@ -1,9 +1,8 @@
 package com.mandiri.goldmarket.data.repository.history
 
 import com.mandiri.goldmarket.data.model.History
+import com.mandiri.goldmarket.data.remote.response.history.Content
 
 interface HistoryRepository {
-    fun findAllHistory(): List<History>
-    fun deleteHistory(positon: Int): History
-    fun addHistory(history: History): History
+    suspend fun getCustomerHistory(): List<Content>?
 }

@@ -1,7 +1,7 @@
-package com.mandiri.goldmarket.data.repository.retrofit
+package com.mandiri.goldmarket.data.repository.auth
 
 import android.util.Log
-import com.mandiri.goldmarket.data.remote.api.auth.AuthApi
+import com.mandiri.goldmarket.data.remote.api.AuthApi
 import com.mandiri.goldmarket.data.remote.request.auth.LoginRequest
 import com.mandiri.goldmarket.data.remote.request.auth.RegisterRequest
 import com.mandiri.goldmarket.data.remote.response.auth.LoginResponse
@@ -12,9 +12,9 @@ import java.lang.Exception
 
 class AuthRetrofitRepository(private val authApi: AuthApi,
                              private val sharedPreferences: CustomSharedPreferences
-) {
+): AuthRepository {
 
-    suspend fun register(request: RegisterRequest): RegisterResponse? {
+    override suspend fun register(request: RegisterRequest): RegisterResponse? {
         return try {
             withTimeout(7000) {
                 val response = authApi.registerCustomer(request)
@@ -31,7 +31,7 @@ class AuthRetrofitRepository(private val authApi: AuthApi,
         }
     }
 
-    suspend fun login(request: LoginRequest): LoginResponse? {
+    override suspend fun login(request: LoginRequest): LoginResponse? {
         return try {
             withTimeout(7000) {
                 val response = authApi.loginCustomer(request)

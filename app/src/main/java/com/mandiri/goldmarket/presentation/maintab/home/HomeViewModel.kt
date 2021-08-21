@@ -11,17 +11,17 @@ import com.mandiri.goldmarket.data.remote.request.pocket.Product
 import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.data.remote.response.product.ProductResponse
-import com.mandiri.goldmarket.data.repository.retrofit.CustomerReftorfitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.ProductRetrofitRepository
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.product.ProductRetrofitRepository
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val customerRepository: CustomerReftorfitRepository,
+class HomeViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit,
                     private val productRepository: ProductRetrofitRepository,
-                    private val pocketRetrofit: PocketRetrofitRepository
+                    private val pocketRetrofit: PocketRepositoryRetrofit
 ): ViewModel() {
 
     private var _customerLiveData = MutableLiveData<CustomerResponse>()
@@ -59,7 +59,7 @@ class HomeViewModel(private val customerRepository: CustomerReftorfitRepository,
         viewModelScope.launch(Dispatchers.IO) {
             _response.postValue(EventResult.Loading)
             delay(1000)
-            val customer = customerRepository.findCustomerById()
+            val customer = customerRepoRetrofit.findCustomerById()
             val pockets = pocketRetrofit.getAllCustomerPockets()
             val product = productRepository.getProductById(productId)
             val totalBalance = pockets?.map { it.totalAmount }?.sum()

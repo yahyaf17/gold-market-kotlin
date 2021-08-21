@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.remote.RetrofitInstance
-import com.mandiri.goldmarket.data.repository.retrofit.CustomerReftorfitRepository
-import com.mandiri.goldmarket.data.repository.retrofit.PocketRetrofitRepository
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
 import com.mandiri.goldmarket.databinding.FragmentProfileBinding
 import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
@@ -31,8 +31,8 @@ class ProfileFragment : Fragment() {
             val customerApi = RetrofitInstance(sharedPreferences).customerApi
             val pocketApi = RetrofitInstance(sharedPreferences).pocketApi
             return ProfileViewModel(
-                CustomerReftorfitRepository(customerApi, sharedPreferences),
-                PocketRetrofitRepository(pocketApi, sharedPreferences)
+                CustomerRepositoryRetrofit(customerApi, sharedPreferences),
+                PocketRepositoryRetrofit(pocketApi, sharedPreferences)
             ) as T
         }
     }
