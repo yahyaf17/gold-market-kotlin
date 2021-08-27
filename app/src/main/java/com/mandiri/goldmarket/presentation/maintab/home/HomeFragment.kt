@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -20,7 +19,8 @@ import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofi
 import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
 import com.mandiri.goldmarket.data.repository.product.ProductRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
-import com.mandiri.goldmarket.presentation.maintab.pocket.NewPocketDialog
+import com.mandiri.goldmarket.presentation.maintab.home.pocket.NewPocketDialog
+import com.mandiri.goldmarket.presentation.maintab.home.product.ChangeProductDialog
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.EventResult
 import kotlin.properties.Delegates
@@ -67,6 +67,7 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
         viewModel.getHomeInfo(1)
+//        viewModel.getAllProducts()
         binding.apply {
 
             // active when current pocket is showing
@@ -106,10 +107,11 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
             }
 
             btnSwitchProduct.setOnClickListener {
-                Toast.makeText(this@HomeFragment.context,
-                    "Other product still in development",
-                    Toast.LENGTH_SHORT
-                ).show()
+                ChangeProductDialog.newInstance().show(childFragmentManager, ChangeProductDialog.TAG)
+//                Toast.makeText(this@HomeFragment.context,
+//                    "Other product still in development",
+//                    Toast.LENGTH_SHORT
+//                ).show()
             }
         }
     }

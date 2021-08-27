@@ -46,7 +46,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textProductType"
-                    app:srcCompat="@drawable/ic_gold" />
+                    productImage="@{pocket.product.id}" />
 
                 <TextView
                     android:id="@+id/textTitlePocket"

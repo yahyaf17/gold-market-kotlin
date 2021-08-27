@@ -20,7 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit,
-                    private val productRepository: ProductRetrofitRepository,
+                    private val productRepoRetrofit: ProductRetrofitRepository,
                     private val pocketRetrofit: PocketRepositoryRetrofit
 ): ViewModel() {
 
@@ -29,6 +29,7 @@ class HomeViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit
     private var _pocketSelectedLiveData = MutableLiveData<PocketResponse>()
     private var _pocketsLiveData = MutableLiveData<List<PocketResponse>>()
     private var _productLiveData = MutableLiveData<ProductResponse>()
+    private var _productsLiveData = MutableLiveData<List<ProductResponse>>()
     private val _response = MutableLiveData<EventResult>(EventResult.Idle)
 
     val response: LiveData<EventResult>
@@ -41,28 +42,30 @@ class HomeViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit
         get() = _pocketSelectedLiveData
     val productLiveData: LiveData<ProductResponse>
         get() = _productLiveData
+    val productsLiveData: LiveData<List<ProductResponse>>
+        get() = _productsLiveData
 
-    fun createNewPocketRoom(pocketName: String, custId: String) {
+    fun createNewPocket(pocketName: String, custId: String, productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             pocketRetrofit.createPocket(PocketRequest(
                 pocketName = pocketName,
                 pocketQty = 0.0,
-                product = Product(1),
+                product = Product(productId),
                 customer = Customer(custId),
                 totalAmount = 0)
             )
         }
     }
 
-
     private fun homeObservable(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _response.postValue(EventResult.Loading)
             delay(1000)
             val customer = customerRepoRetrofit.findCustomerById()
-            val pockets = pocketRetrofit.getAllCustomerPockets()
-            val product = productRepository.getProductById(productId)
-            val totalBalance = pockets?.map { it.totalAmount }?.sum()
+            val pockets = pocketRetrofit.getAllCustomerPocketsByProduct(productId)
+            val product = productRepoRetrofit.getProductById(productId)
+            val totalBalance = pocketRetrofit.getAllCustomerPockets()?.map { it.totalAmount }?.sum()
+            val products = productRepoRetrofit.getAllProducts()
             if (customer == null) {
                 Log.d("HomeVM", "homeObserveable: Success")
                 _response.postValue(EventResult.ErrorMessage("Can't Retrieve Customer Data"))
@@ -70,6 +73,7 @@ class HomeViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit
             }
             _customerLiveData.postValue(customer)
             Log.d("HomeVM", "homeObservable: $customer")
+            _productsLiveData.postValue(products)
             _totalBalanceLiveData.postValue(totalBalance ?: 0)
             _pocketsLiveData.postValue(pockets)
             _productLiveData.postValue(product)

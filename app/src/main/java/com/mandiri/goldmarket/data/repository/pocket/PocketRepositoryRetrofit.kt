@@ -63,4 +63,22 @@ class PocketRepositoryRetrofit(private val pocketApi: PocketApi,
         }
     }
 
+    override suspend fun getAllCustomerPocketsByProduct(productId: Int): List<PocketResponse>? {
+        return try {
+            withTimeout(7000) {
+                val customerId = sharedPreferences.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)
+                val response = pocketApi.getAllCustomerPockets(customerId ?: "null")
+                if (response.isSuccessful) {
+                    Log.d("PocketRepo", "customerPockets: ${response.body()}")
+                    response.body()?.filter { p -> p.product.id == productId }
+                } else {
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("PocketRepo", "customerPocketsFailed: ${e.localizedMessage}")
+            null
+        }
+    }
+
 }

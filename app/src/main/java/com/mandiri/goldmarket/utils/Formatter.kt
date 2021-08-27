@@ -16,8 +16,8 @@ object Formatter {
     }
 
     fun dateFormatter(value: String): String {
-        var date = LocalDate.parse(value)
-        var formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+        val date = LocalDate.parse(value)
+        val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
         return formatter.format(date)
     }
 

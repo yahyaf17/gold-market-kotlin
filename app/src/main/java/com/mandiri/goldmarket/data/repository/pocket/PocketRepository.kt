@@ -9,4 +9,5 @@ interface PocketRepository {
     suspend fun createPocket(request: PocketRequest): PocketResponse?
     suspend fun getPocketById(pocketId: String): PocketResponse?
     suspend fun getAllCustomerPockets(): List<PocketResponse>?
+    suspend fun getAllCustomerPocketsByProduct(productId: Int): List<PocketResponse>?
 }
