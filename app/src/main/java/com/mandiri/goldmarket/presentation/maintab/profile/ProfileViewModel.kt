@@ -7,15 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.remote.request.customer.CustomerRequest
 import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepository
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepository
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit,
-                       private val pocketRetrofitRepository: PocketRepositoryRetrofit,
+class ProfileViewModel(private val customerRetrofit: CustomerRepository,
+                       private val pocketRepository: PocketRepository,
 ): ViewModel() {
 
     private val _customerLiveData = MutableLiveData<CustomerResponse>()
@@ -35,31 +35,31 @@ class ProfileViewModel(private val customerRepoRetrofit: CustomerRepositoryRetro
 
     fun findCustomerById() {
         viewModelScope.launch(Dispatchers.IO) {
-            val customer = customerRepoRetrofit.findCustomerById()
+            val customer = customerRetrofit.findCustomerById()
             _customerLiveData.postValue(customer)
         }
     }
 
     fun updateCustomerData(customer: CustomerRequest) {
         viewModelScope.launch(Dispatchers.IO) {
-            customerRepoRetrofit.updateCustomerData(customer)
+            customerRetrofit.updateCustomerData(customer)
         }
     }
 
-    private fun profileInfoObservable(id: Int) {
+    private fun profileInfoObservable() {
         viewModelScope.launch(Dispatchers.IO) {
             _response.postValue(EventResult.Loading)
             delay(1000)
-            val customer = customerRepoRetrofit.findCustomerById()
+            val customer = customerRetrofit.findCustomerById()
             if (customer == null) {
                 _response.postValue(EventResult.ErrorMessage("Can't Retrieve Customer Data"))
                 Log.d("CustomerVM", "getCustomerInfo: Error")
                 return@launch
             }
             _customerLiveData.postValue(customer)
-            val pocketCount = pocketRetrofitRepository.getAllCustomerPockets()?.size ?: 0
+            val pocketCount = pocketRepository.getAllCustomerPockets()?.size ?: 0
             _pocketCountLiveData.postValue(pocketCount)
-            val totalBalance = pocketRetrofitRepository.getAllCustomerPockets()
+            val totalBalance = pocketRepository.getAllCustomerPockets()
                 ?.map { it.totalAmount }
                 ?.sum()
             _totalBalanceLiveData.postValue(totalBalance ?: 0)
@@ -68,7 +68,7 @@ class ProfileViewModel(private val customerRepoRetrofit: CustomerRepositoryRetro
         }
     }
 
-    fun getProfileInfo(id: Int) {
-        profileInfoObservable(id)
+    fun getProfileInfo() {
+        profileInfoObservable()
     }
 }

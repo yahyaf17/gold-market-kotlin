@@ -9,10 +9,8 @@ import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.model.Customer
 import com.mandiri.goldmarket.data.remote.request.customer.CustomerRequest
 import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
-import kotlin.properties.Delegates
 
 class EditProfileDialog: DialogFragment() {
 
@@ -60,7 +58,7 @@ class EditProfileDialog: DialogFragment() {
                                 photoProfile = customer.photoProfile
                             )
                         )
-                        viewModel.value.getProfileInfo(1)
+                        viewModel.value.getProfileInfo()
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { _, _ ->

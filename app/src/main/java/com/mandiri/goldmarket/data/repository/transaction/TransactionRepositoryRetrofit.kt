@@ -6,8 +6,9 @@ import com.mandiri.goldmarket.data.remote.request.transaction.TransactionRequest
 import com.mandiri.goldmarket.data.remote.response.transaction.TransactionResponse
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
+import javax.inject.Inject
 
-class TransactionRepositoryRetrofit(private val transactionApi: TransactionApi): TransactionRepository {
+class TransactionRepositoryRetrofit @Inject constructor(private val transactionApi: TransactionApi): TransactionRepository {
 
     override suspend fun performTransaction(request: TransactionRequest): TransactionResponse? {
         return try {

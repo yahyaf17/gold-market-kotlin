@@ -7,8 +7,9 @@ import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
+import javax.inject.Inject
 
-class PocketRepositoryRetrofit(private val pocketApi: PocketApi,
+class PocketRepositoryRetrofit @Inject constructor(private val pocketApi: PocketApi,
                                private val sharedPreferences: CustomSharedPreferences): PocketRepository {
 
     override suspend fun createPocket(request: PocketRequest): PocketResponse? {
@@ -48,7 +49,7 @@ class PocketRepositoryRetrofit(private val pocketApi: PocketApi,
     override suspend fun getAllCustomerPockets(): List<PocketResponse>? {
         return try {
             withTimeout(7000) {
-                val customerId = sharedPreferences.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)
+                val customerId = sharedPreferences.retrieveValue(CustomSharedPreferences.Key.CUSTOMER_ID)
                 val response = pocketApi.getAllCustomerPockets(customerId ?: "null")
                 if (response.isSuccessful) {
                     Log.d("PocketRepo", "customerPockets: ${response.body()}")
@@ -66,7 +67,7 @@ class PocketRepositoryRetrofit(private val pocketApi: PocketApi,
     override suspend fun getAllCustomerPocketsByProduct(productId: Int): List<PocketResponse>? {
         return try {
             withTimeout(7000) {
-                val customerId = sharedPreferences.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)
+                val customerId = sharedPreferences.retrieveValue(CustomSharedPreferences.Key.CUSTOMER_ID)
                 val response = pocketApi.getAllCustomerPockets(customerId ?: "null")
                 if (response.isSuccessful) {
                     Log.d("PocketRepo", "customerPockets: ${response.body()}")

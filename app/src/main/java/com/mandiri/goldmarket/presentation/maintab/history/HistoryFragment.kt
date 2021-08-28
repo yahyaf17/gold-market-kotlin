@@ -2,41 +2,24 @@ package com.mandiri.goldmarket.presentation.maintab.history
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mandiri.goldmarket.data.remote.RetrofitInstance
 import com.mandiri.goldmarket.data.remote.response.history.Content
-import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryRetrofit
 import com.mandiri.goldmarket.databinding.FragmentHistoryBinding
-import com.mandiri.goldmarket.utils.CustomSharedPreferences
+import com.mandiri.goldmarket.presentation.ViewModelFactoryBase
 import com.mandiri.goldmarket.utils.EventResult
-import kotlin.properties.Delegates
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : DaggerFragment() {
 
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var binding: FragmentHistoryBinding
-    private var customerId by Delegates.notNull<Int>()
-    private val factory = object: ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val sharedPreferences = CustomSharedPreferences(requireContext())
-            val historyApi = RetrofitInstance(sharedPreferences).historyApi
-            return HistoryViewModel(HistoryRepositoryRetrofit(historyApi, sharedPreferences)) as T
-        }
-    }
-    private val viewModel: HistoryViewModel by viewModels { factory }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val sharedPref = CustomSharedPreferences(requireContext())
-        customerId = sharedPref.retrieveInt(CustomSharedPreferences.Key.USER_ID)
-    }
+    @Inject
+    lateinit var viewModel: HistoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +33,7 @@ class HistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
         subscriber()
         viewModel.getHistories()
         binding.apply {
@@ -60,6 +44,13 @@ class HistoryFragment : Fragment() {
             }
         }
     }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this, ViewModelFactoryBase {
+            viewModel
+        }).get(HistoryViewModel::class.java)
+    }
+
 
     private fun subscriber() {
         historyAdapter = HistoryAdapter()

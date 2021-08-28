@@ -1,48 +1,31 @@
 package com.mandiri.goldmarket.presentation.maintab.profile
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.remote.RetrofitInstance
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
 import com.mandiri.goldmarket.databinding.FragmentProfileBinding
+import com.mandiri.goldmarket.presentation.ViewModelFactoryBase
 import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.EventResult
-import kotlin.properties.Delegates
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private var customerId by Delegates.notNull<Int>()
     private lateinit var custIdString: String
-    private  val factory =  object: ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val sharedPreferences = CustomSharedPreferences(requireContext())
-            val customerApi = RetrofitInstance(sharedPreferences).customerApi
-            val pocketApi = RetrofitInstance(sharedPreferences).pocketApi
-            return ProfileViewModel(
-                CustomerRepositoryRetrofit(customerApi, sharedPreferences),
-                PocketRepositoryRetrofit(pocketApi, sharedPreferences)
-            ) as T
-        }
-    }
-    private val viewModel: ProfileViewModel by viewModels { factory }
+    @Inject
+    lateinit var viewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPref = CustomSharedPreferences(requireContext())
-        customerId = sharedPref.retrieveInt(CustomSharedPreferences.Key.USER_ID)
-        custIdString = sharedPref.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID).toString()
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
@@ -57,23 +40,33 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
         subscriber()
-        viewModel.getProfileInfo(customerId)
+        viewModel.getProfileInfo()
 
+        val sharedPref = requireContext().getSharedPreferences("CREDENTIALS", Context.MODE_PRIVATE)
         binding.apply {
             lifecycleOwner = this@ProfileFragment
             profileVM = viewModel
             btnSignOut.setOnClickListener {
                 findNavController().navigate(R.id.action_profileFragment_to_onboardingActivity)
                 (activity as? MainTabActivity)?.finish()
-                CustomSharedPreferences(requireContext()).clearAll()
+                CustomSharedPreferences(sharedPref).clearAll()
             }
 
             btnEditProfile.setOnClickListener {
+                custIdString = CustomSharedPreferences(sharedPref)
+                    .retrieveValue(CustomSharedPreferences.Key.CUSTOMER_ID).toString()
                 EditProfileDialog.newInstance(custIdString).show(childFragmentManager, EditProfileDialog.TAG)
             }
 
         }
+    }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this, ViewModelFactoryBase {
+            viewModel
+        }).get(ProfileViewModel::class.java)
     }
 
     private fun subscriber() {

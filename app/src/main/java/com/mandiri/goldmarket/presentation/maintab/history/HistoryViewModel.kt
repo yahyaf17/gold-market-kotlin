@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.remote.response.history.Content
-import com.mandiri.goldmarket.data.repository.history.HistoryRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.history.HistoryRepository
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HistoryViewModel(val historyRetrofitRepository: HistoryRepositoryRetrofit): ViewModel() {
+class HistoryViewModel(val historyRepository: HistoryRepository): ViewModel() {
 
     private val _historyLiveData = MutableLiveData<List<Content>>()
 
@@ -23,7 +23,7 @@ class HistoryViewModel(val historyRetrofitRepository: HistoryRepositoryRetrofit)
         viewModelScope.launch(Dispatchers.IO) {
             _response.postValue(EventResult.Loading)
             delay(1000)
-            val histories = historyRetrofitRepository.getCustomerHistory()
+            val histories = historyRepository.getCustomerHistory()
             if (histories == null) {
                 _response.postValue(EventResult.Success("No History Data"))
                 return@launch

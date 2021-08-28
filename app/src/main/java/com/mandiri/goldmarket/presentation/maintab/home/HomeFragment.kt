@@ -2,55 +2,35 @@ package com.mandiri.goldmarket.presentation.maintab.home
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.remote.RetrofitInstance
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.product.ProductRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
+import com.mandiri.goldmarket.presentation.ViewModelFactoryBase
 import com.mandiri.goldmarket.presentation.maintab.home.pocket.NewPocketDialog
 import com.mandiri.goldmarket.presentation.maintab.home.product.ChangeProductDialog
-import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.EventResult
-import kotlin.properties.Delegates
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
+class HomeFragment : DaggerFragment(), HomePocketAdapter.OnClickItem {
 
     private lateinit var binding: FragmentHomeBinding
-    private var customerId by Delegates.notNull<Int>()
     private lateinit var pockets: List<PocketResponse>
-    private  val factory =  object: ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val sharedPreferences = CustomSharedPreferences(requireContext())
-            val customerApi = RetrofitInstance(sharedPreferences).customerApi
-            val productApi = RetrofitInstance(sharedPreferences).productApi
-            val pocketApi = RetrofitInstance(sharedPreferences).pocketApi
-            return HomeViewModel(
-                CustomerRepositoryRetrofit(customerApi, sharedPreferences),
-                ProductRetrofitRepository(productApi),
-                PocketRepositoryRetrofit(pocketApi, sharedPreferences)
-            ) as T
-        }
-    }
-    private val viewModel: HomeViewModel by viewModels { factory }
+
+    @Inject
+    lateinit var viewModel: HomeViewModel
     private lateinit var homePocketAdapter: HomePocketAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPref = CustomSharedPreferences(requireContext())
-        customerId = sharedPref.retrieveInt(CustomSharedPreferences.Key.USER_ID)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
@@ -66,8 +46,8 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
+        initViewModel()
         viewModel.getHomeInfo(1)
-//        viewModel.getAllProducts()
         binding.apply {
 
             // active when current pocket is showing
@@ -108,13 +88,16 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
 
             btnSwitchProduct.setOnClickListener {
                 ChangeProductDialog.newInstance().show(childFragmentManager, ChangeProductDialog.TAG)
-//                Toast.makeText(this@HomeFragment.context,
-//                    "Other product still in development",
-//                    Toast.LENGTH_SHORT
-//                ).show()
             }
         }
     }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this, ViewModelFactoryBase {
+            viewModel
+        }).get(HomeViewModel::class.java)
+    }
+
 
     private fun subscriber() {
         homePocketAdapter = HomePocketAdapter(this@HomeFragment)
@@ -167,6 +150,7 @@ class HomeFragment : Fragment(), HomePocketAdapter.OnClickItem {
         const val TRX_AMOUNT = "1"
         const val POCKET_SELECTED = "0"
         const val PRODUCT_ID = "productId"
+        const val CUSTOMER_ID = "customerId"
     }
 
 }

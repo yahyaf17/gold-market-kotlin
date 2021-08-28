@@ -3,10 +3,8 @@ package com.mandiri.goldmarket.presentation.maintab.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mandiri.goldmarket.data.model.Pocket
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.databinding.PocketListItemBinding
-import com.mandiri.goldmarket.utils.Formatter
 
 class HomePocketAdapter(private val onClickListener: OnClickItem): RecyclerView.Adapter<HomePocketAdapter.HomePocketViewHolder>() {
 

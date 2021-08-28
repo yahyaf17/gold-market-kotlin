@@ -5,40 +5,28 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.remote.RetrofitInstance
 import com.mandiri.goldmarket.data.remote.response.auth.LoginResponse
-import com.mandiri.goldmarket.data.repository.auth.AuthRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentLoginBinding
 import com.mandiri.goldmarket.presentation.maintab.main.MainTabActivity
 import com.mandiri.goldmarket.presentation.onboarding.onboard.OnboardingActivity
 import com.mandiri.goldmarket.utils.ButtonUtils
-import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.EventResult
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class LoginFragment : Fragment() {
+class LoginFragment : DaggerFragment() {
 
+    @Inject
+    lateinit var viewModel: LoginViewModel
     private lateinit var binding: FragmentLoginBinding
-    private val factory =  object: ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val sharedPreferences = CustomSharedPreferences(requireContext())
-            val dataSoure = RetrofitInstance(sharedPreferences).authApi
-            val repository = AuthRetrofitRepository(dataSoure, sharedPreferences)
-            return LoginViewModel(repository) as T
-        }
-    }
-    private val viewModel: LoginViewModel by viewModels { factory }
     private var toggleOn by Delegates.notNull<Boolean>()
 
     override fun onCreateView(
@@ -107,9 +95,7 @@ class LoginFragment : Fragment() {
     private fun moveToHome(customer: LoginResponse?) {
         val thisActivity = (activity as OnboardingActivity)
         val intent = Intent(thisActivity, MainTabActivity::class.java)
-        val sharedPref = CustomSharedPreferences(requireContext())
         customer?.let {
-            sharedPref.setValue(CustomSharedPreferences.Key.USER_ID, 1)
             startActivity(intent)
             thisActivity.finish()
         } ?: Toast.makeText(this@LoginFragment.context, "Wrong password or account not registered", Toast.LENGTH_LONG).show()

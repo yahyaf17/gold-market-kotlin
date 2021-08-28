@@ -15,4 +15,5 @@ object Version {
     const val roomKtx = "2.3.0"
     const val retrofit = "2.9.0"
     const val moshi = "2.4.0"
+    const val dagger = "2.37"
 }

@@ -6,14 +6,15 @@ import com.mandiri.goldmarket.data.remote.response.history.Content
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
+import javax.inject.Inject
 
-class HistoryRepositoryRetrofit(private val historyApi: HistoryApi,
+class HistoryRepositoryRetrofit @Inject constructor(private val historyApi: HistoryApi,
                                 private val sharedPreferences: CustomSharedPreferences): HistoryRepository {
 
     override suspend fun getCustomerHistory(): List<Content>? {
         return try {
             withTimeout(20000) {
-                val customerId = sharedPreferences.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)
+                val customerId = sharedPreferences.retrieveValue(CustomSharedPreferences.Key.CUSTOMER_ID)
                 val response = historyApi.getPurchaseHistoryByCustomer(customerId!!)
                 if (response.isSuccessful) {
                     Log.d("HistoryRepo", "Success: ${response.body()}")

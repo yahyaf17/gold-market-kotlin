@@ -9,16 +9,16 @@ import com.mandiri.goldmarket.data.remote.request.pocket.Product
 import com.mandiri.goldmarket.data.remote.request.transaction.Purchase
 import com.mandiri.goldmarket.data.remote.request.transaction.PurchaseDetail
 import com.mandiri.goldmarket.data.remote.request.transaction.TransactionRequest
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRetrofit
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepository
+import com.mandiri.goldmarket.data.repository.transaction.TransactionRepository
 import com.mandiri.goldmarket.presentation.maintab.home.HomeFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TransactionViewModel(private val pocketRetrofitRepository: PocketRepositoryRetrofit,
-                           private val transactionRetrofitRepository: TransactionRepositoryRetrofit
+class TransactionViewModel(private val pocketRepository: PocketRepository,
+                           private val transactionRepository: TransactionRepository
 ): ViewModel() {
 
     var transactionType: Int = HomeFragment.TRX_TYPE.toInt()
@@ -44,14 +44,14 @@ class TransactionViewModel(private val pocketRetrofitRepository: PocketRepositor
 
     fun retrievePocketName() {
         viewModelScope.launch(Dispatchers.IO) {
-            val pocket = pocketRetrofitRepository.getPocketById(pocketId)
+            val pocket = pocketRepository.getPocketById(pocketId)
             _pocketName.postValue(pocket!!.pocketName)
         }
     }
 
     fun addTransaction(customerId: String, productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            transactionRetrofitRepository.performTransaction(TransactionRequest(
+            transactionRepository.performTransaction(TransactionRequest(
                 pocketId,
                 Purchase(
                     Customer(customerId),

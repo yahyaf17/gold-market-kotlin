@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.remote.request.auth.LoginRequest
-import com.mandiri.goldmarket.data.repository.auth.AuthRetrofitRepository
+import com.mandiri.goldmarket.data.repository.auth.AuthRepository
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val authRepository: AuthRetrofitRepository
+class LoginViewModel(private val authRepository: AuthRepository
 ): ViewModel() {
 
     private val _response = MutableLiveData<EventResult>(EventResult.Idle)

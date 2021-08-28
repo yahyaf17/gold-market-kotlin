@@ -3,37 +3,27 @@ package com.mandiri.goldmarket.presentation.onboarding.register
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.remote.RetrofitInstance
 import com.mandiri.goldmarket.data.remote.request.auth.RegisterRequest
-import com.mandiri.goldmarket.data.repository.auth.AuthRetrofitRepository
 import com.mandiri.goldmarket.databinding.FragmentRegisterBinding
+import com.mandiri.goldmarket.presentation.ViewModelFactoryBase
 import com.mandiri.goldmarket.utils.ButtonUtils
-import com.mandiri.goldmarket.utils.CustomSharedPreferences
+import dagger.android.support.DaggerFragment
 import java.util.*
+import javax.inject.Inject
 
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentRegisterBinding
-    private  val factory =  object: ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val sharedPreferences = CustomSharedPreferences(requireContext())
-            val dataSoure = RetrofitInstance(sharedPreferences).authApi
-            val repository = AuthRetrofitRepository(dataSoure, sharedPreferences)
-            return RegisterViewModel(repository) as T
-        }
-    }
-    private val viewModel: RegisterViewModel by viewModels { factory }
+    @Inject
+    lateinit var viewModel: RegisterViewModel
     private var toggleOn: Boolean = false
 
     override fun onCreateView(
@@ -47,6 +37,7 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
 
         binding.also { bind ->
             bind.btnRegister.setOnClickListener {
@@ -69,6 +60,12 @@ class RegisterFragment : Fragment() {
                 ButtonUtils.showPasswordUtils(this.toggleOn, bind.textRegisterPassword, bind.showPassRegister)
             }
         }
+    }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this, ViewModelFactoryBase {
+            viewModel
+        }).get(RegisterViewModel::class.java)
     }
 
     private fun performRegister() {

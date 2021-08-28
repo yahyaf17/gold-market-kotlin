@@ -1,5 +1,6 @@
 package com.mandiri.goldmarket.presentation.onboarding.onboard
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +19,9 @@ class OnboardingActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val sharedPref = CustomSharedPreferences(applicationContext)
-        val token = sharedPref.retrieveString(CustomSharedPreferences.Key.TOKEN)
+        val sharedPrefInit = applicationContext.getSharedPreferences("CREDENTIALS", Context.MODE_PRIVATE)
+        val sharedPref = CustomSharedPreferences(sharedPrefInit)
+        val token = sharedPref.retrieveValue(CustomSharedPreferences.Key.TOKEN)
         if (token != null) {
             startActivity(Intent(this, MainTabActivity::class.java))
             this.finish()

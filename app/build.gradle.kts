@@ -3,7 +3,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-kapt")
+    kotlin("kapt")
 }
 
 android {
@@ -46,8 +46,8 @@ android {
 }
 
 dependencies {
-    kapt("androidx.room:room-compiler:2.3.0")
     AppDependencies.dependencies.getValue("implementation").forEach { d -> implementation(d) }
+    AppDependencies.dependencies.getValue("kapt").forEach { k -> kapt(k) }
     AppDependencies.dependencies.getValue("testImplementation").forEach { t -> testImplementation(t) }
     AppDependencies.dependencies.getValue("androidTestImplementation").forEach { ti -> androidTestImplementation(ti) }
 }

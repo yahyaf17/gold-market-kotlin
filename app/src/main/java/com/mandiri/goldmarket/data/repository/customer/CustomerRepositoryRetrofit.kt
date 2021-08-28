@@ -7,15 +7,16 @@ import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
+import javax.inject.Inject
 
-class CustomerRepositoryRetrofit(private val customerApi: CustomerApi,
+class CustomerRepositoryRetrofit @Inject constructor(private val customerApi: CustomerApi,
                                  private val sharedPref: CustomSharedPreferences
 ): CustomerRepository {
 
     override suspend fun findCustomerById(): CustomerResponse? {
         return try {
             withTimeout(7000) {
-                val customerId = sharedPref.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID)
+                val customerId = sharedPref.retrieveValue(CustomSharedPreferences.Key.CUSTOMER_ID)
                 val response = customerApi.getCustomerById(customerId ?: "null")
                 if (response.isSuccessful) {
                     Log.d("CustomerRepo", "customerById: ${response.body()!!.userName}")

@@ -3,12 +3,13 @@ package com.mandiri.goldmarket.data.remote.interceptor
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
-class AuthTokenInterceptor(private val sharedPreferences: CustomSharedPreferences): Interceptor {
+class AuthTokenInterceptor @Inject constructor(private val sharedPreferences: CustomSharedPreferences): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originReq = chain.request()
         if (!originReq.url().toString().contains("auth")) {
-            sharedPreferences.retrieveString(CustomSharedPreferences.Key.TOKEN)?.let {
+            sharedPreferences.retrieveValue(CustomSharedPreferences.Key.TOKEN)?.let {
                 val requestBuilder = originReq.newBuilder()
                     .header("Authorization", "Bearer ${it}")
                 val request = requestBuilder.build()

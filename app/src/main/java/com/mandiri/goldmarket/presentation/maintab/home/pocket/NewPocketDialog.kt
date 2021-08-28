@@ -18,17 +18,10 @@ class NewPocketDialog: DialogFragment() {
 
     private lateinit var pocketNameText: EditText
     private lateinit var productListView: AutoCompleteTextView
-    private lateinit var customerId: String
     private val viewModel by lazy {
         requireParentFragment().viewModels<HomeViewModel>()
     }
     private lateinit var productSelected: ProductResponse
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val sharedPref = CustomSharedPreferences(requireContext())
-        customerId = sharedPref.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID).toString()
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -50,7 +43,10 @@ class NewPocketDialog: DialogFragment() {
                 .setPositiveButton("Create",
                     DialogInterface.OnClickListener { _, _ ->
                         viewModel.value.apply {
-                            createNewPocket(pocketNameText.text.toString(), customerId, productSelected.id)
+                            createNewPocket(
+                                pocketNameText.text.toString(),
+                                pocketSelectedLiveData.value?.customer!!.id,
+                                productSelected.id)
                             getHomeInfo(productSelected.id)
                         }
                     })

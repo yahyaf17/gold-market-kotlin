@@ -1,27 +1,25 @@
 package com.mandiri.goldmarket.presentation.maintab.transaction
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mandiri.goldmarket.R
-import com.mandiri.goldmarket.data.remote.RetrofitInstance
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.transaction.TransactionRepositoryRetrofit
 import com.mandiri.goldmarket.databinding.FragmentTransactionBinding
+import com.mandiri.goldmarket.presentation.ViewModelFactoryBase
 import com.mandiri.goldmarket.presentation.maintab.home.HomeFragment
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import com.mandiri.goldmarket.utils.Formatter
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class TransactionFragment : Fragment() {
+class TransactionFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentTransactionBinding
     private lateinit var customerId: String
@@ -29,18 +27,9 @@ class TransactionFragment : Fragment() {
     private var price by Delegates.notNull<Int>()
     private var productId by Delegates.notNull<Int>()
     private lateinit var selectedPocket: String
-    private  val factory =  object: ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val sharedPreferences = CustomSharedPreferences(requireContext())
-            val pocketapi = RetrofitInstance(sharedPreferences).pocketApi
-            val transactionApi = RetrofitInstance(sharedPreferences).transactionApi
-            return TransactionViewModel(
-                PocketRepositoryRetrofit(pocketapi, sharedPreferences),
-                TransactionRepositoryRetrofit(transactionApi)
-            ) as T
-        }
-    }
-    private val viewModel: TransactionViewModel by viewModels { factory }
+
+    @Inject
+    lateinit var viewModel: TransactionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +39,9 @@ class TransactionFragment : Fragment() {
             selectedPocket = getString(HomeFragment.POCKET_SELECTED).toString()
             productId = getInt(HomeFragment.PRODUCT_ID)
         }
-        val sharedPref = CustomSharedPreferences(requireContext())
-        customerId = sharedPref.retrieveString(CustomSharedPreferences.Key.CUSTOMER_ID).toString()
+        val initSharedPreference = requireContext().getSharedPreferences("CREDENTIALS", Context.MODE_PRIVATE)
+        val sharedPref = CustomSharedPreferences(initSharedPreference)
+        customerId = sharedPref.retrieveValue(CustomSharedPreferences.Key.CUSTOMER_ID).toString()
     }
 
     override fun onCreateView(
@@ -66,6 +56,7 @@ class TransactionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
+        initViewModel()
         viewModel.transactionType = type
         viewModel.pricePerGram = price
         viewModel.pocketId = selectedPocket
@@ -92,6 +83,13 @@ class TransactionFragment : Fragment() {
             }
         }
     }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this, ViewModelFactoryBase {
+            viewModel
+        }).get(TransactionViewModel::class.java)
+    }
+
 
     private fun subscriber() {
         viewModel.totalPrice.observe(viewLifecycleOwner) {

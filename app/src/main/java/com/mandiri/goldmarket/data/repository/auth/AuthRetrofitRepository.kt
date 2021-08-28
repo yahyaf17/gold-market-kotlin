@@ -9,8 +9,9 @@ import com.mandiri.goldmarket.data.remote.response.auth.RegisterResponse
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
+import javax.inject.Inject
 
-class AuthRetrofitRepository(private val authApi: AuthApi,
+class AuthRetrofitRepository @Inject constructor( private val authApi: AuthApi,
                              private val sharedPreferences: CustomSharedPreferences
 ): AuthRepository {
 

@@ -11,17 +11,17 @@ import com.mandiri.goldmarket.data.remote.request.pocket.Product
 import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.data.remote.response.product.ProductResponse
-import com.mandiri.goldmarket.data.repository.customer.CustomerRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.pocket.PocketRepositoryRetrofit
-import com.mandiri.goldmarket.data.repository.product.ProductRetrofitRepository
+import com.mandiri.goldmarket.data.repository.customer.CustomerRepository
+import com.mandiri.goldmarket.data.repository.pocket.PocketRepository
+import com.mandiri.goldmarket.data.repository.product.ProductRepository
 import com.mandiri.goldmarket.utils.EventResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val customerRepoRetrofit: CustomerRepositoryRetrofit,
-                    private val productRepoRetrofit: ProductRetrofitRepository,
-                    private val pocketRetrofit: PocketRepositoryRetrofit
+class HomeViewModel(private val customerRepoRetrofit: CustomerRepository,
+                    private val productRepoRetrofit: ProductRepository,
+                    private val pocketRetrofit: PocketRepository
 ): ViewModel() {
 
     private var _customerLiveData = MutableLiveData<CustomerResponse>()

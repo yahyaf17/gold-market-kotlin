@@ -6,8 +6,9 @@ import com.mandiri.goldmarket.data.remote.response.product.AllProductResponse
 import com.mandiri.goldmarket.data.remote.response.product.ProductResponse
 import kotlinx.coroutines.withTimeout
 import java.lang.Exception
+import javax.inject.Inject
 
-class ProductRetrofitRepository(private val productApi: ProductApi): ProductRepository {
+class ProductRetrofitRepository @Inject constructor(private val productApi: ProductApi): ProductRepository {
 
     override suspend fun getProductById(productId: Int): ProductResponse? {
         return try {
