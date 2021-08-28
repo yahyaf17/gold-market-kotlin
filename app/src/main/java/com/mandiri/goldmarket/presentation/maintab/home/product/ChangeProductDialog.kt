@@ -39,6 +39,7 @@ class ChangeProductDialog: DialogFragment() {
                 .setPositiveButton("Change",
                     DialogInterface.OnClickListener { _, _ ->
                         viewModel.value.getHomeInfo(productSelected.id)
+                        requireParentFragment().onResume()
                     })
                 .setNegativeButton("Cancel",
                     DialogInterface.OnClickListener { _, _ ->

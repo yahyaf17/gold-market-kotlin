@@ -43,6 +43,15 @@ class HomeFragment : DaggerFragment(), HomePocketAdapter.OnClickItem {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            btnSell.isEnabled = false
+            btnBuy.isEnabled = false
+            alertPickPocket.visibility = View.VISIBLE
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscriber()
@@ -150,7 +159,6 @@ class HomeFragment : DaggerFragment(), HomePocketAdapter.OnClickItem {
         const val TRX_AMOUNT = "1"
         const val POCKET_SELECTED = "0"
         const val PRODUCT_ID = "productId"
-        const val CUSTOMER_ID = "customerId"
     }
 
 }
