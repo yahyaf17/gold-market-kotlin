@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mandiri.goldmarket.data.remote.request.pocket.Customer
+import com.mandiri.goldmarket.data.remote.request.pocket.EditPocketRequest
 import com.mandiri.goldmarket.data.remote.request.pocket.PocketRequest
 import com.mandiri.goldmarket.data.remote.request.pocket.Product
 import com.mandiri.goldmarket.data.remote.response.customer.CustomerResponse
@@ -31,6 +32,7 @@ class HomeViewModel(private val customerRepoRetrofit: CustomerRepository,
     private var _productLiveData = MutableLiveData<ProductResponse>()
     private var _productsLiveData = MutableLiveData<List<ProductResponse>>()
     private val _response = MutableLiveData<EventResult>(EventResult.Idle)
+    private val _deleteResponse = MutableLiveData<EventResult>(EventResult.Idle)
 
     val response: LiveData<EventResult>
         get() = _response
@@ -44,6 +46,8 @@ class HomeViewModel(private val customerRepoRetrofit: CustomerRepository,
         get() = _productLiveData
     val productsLiveData: LiveData<List<ProductResponse>>
         get() = _productsLiveData
+    val deleteResponse: LiveData<EventResult>
+        get() = _deleteResponse
 
     fun createNewPocket(pocketName: String, custId: String, productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -94,6 +98,24 @@ class HomeViewModel(private val customerRepoRetrofit: CustomerRepository,
 
     fun getCurrentPocket(idPocket: String) {
         getPocketSelected(idPocket)
+    }
+
+    fun editPocketName(pocketRequest: EditPocketRequest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            pocketRetrofit.editPocketName(pocketRequest)
+        }
+    }
+
+    fun deletePocket(pocketId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _deleteResponse.postValue(EventResult.Loading)
+            val response = pocketRetrofit.deletePocket(pocketId)
+            if (response > 400) {
+                _deleteResponse.postValue(EventResult.ErrorMessage("Failed Delete Pocket"))
+                return@launch
+            }
+            _deleteResponse.postValue(EventResult.Success(response))
+        }
     }
 
 }

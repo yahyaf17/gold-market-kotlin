@@ -1,10 +1,13 @@
 package com.mandiri.goldmarket.presentation.maintab.home
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -13,6 +16,7 @@ import com.mandiri.goldmarket.R
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.databinding.FragmentHomeBinding
 import com.mandiri.goldmarket.presentation.ViewModelFactoryBase
+import com.mandiri.goldmarket.presentation.maintab.home.pocket.EditPocketDialog
 import com.mandiri.goldmarket.presentation.maintab.home.pocket.NewPocketDialog
 import com.mandiri.goldmarket.presentation.maintab.home.product.ChangeProductDialog
 import com.mandiri.goldmarket.utils.EventResult
@@ -127,6 +131,22 @@ class HomeFragment : DaggerFragment(), HomePocketAdapter.OnClickItem {
                 else -> EventResult.Idle
             }
         }
+        viewModel.deleteResponse.observe(this.viewLifecycleOwner) {
+            when(it) {
+                is EventResult.Loading -> showProgressBar()
+                is EventResult.Success -> {
+                    Toast.makeText(this.requireContext(), "Delete Success", Toast.LENGTH_SHORT)
+                        .show()
+                    hideProgressBar()
+                }
+                is EventResult.ErrorMessage -> {
+                    Toast.makeText(this.requireContext(), "Delete Failed", Toast.LENGTH_SHORT)
+                        .show()
+                    hideProgressBar()
+                }
+                else -> EventResult.Idle
+            }
+        }
     }
 
     private fun showProgressBar() {
@@ -144,6 +164,31 @@ class HomeFragment : DaggerFragment(), HomePocketAdapter.OnClickItem {
             alertPickPocket.visibility = View.GONE
         }
         viewModel.getCurrentPocket(pockets[position].id)
+    }
+
+    override fun onEditPocket(position: Int) {
+        viewModel.getCurrentPocket(pockets[position].id)
+        EditPocketDialog.newInstance(pockets[position].id)
+            .show(childFragmentManager, EditPocketDialog.TAG)
+    }
+
+    override fun onDeletePocket(position: Int) {
+        AlertDialog.Builder(this.context).setTitle("Delete ${pockets[position].pocketName} pocket?")
+            .setMessage("Are you sure want to delete this pocket?")
+            .setPositiveButton("Proceed", DialogInterface.OnClickListener { dialog, _ ->
+                if (pockets[position].pocketQty > 0.00) {
+                    dialog.cancel()
+                    Toast.makeText(this.requireContext(), "Pocket Must be empty", Toast.LENGTH_SHORT)
+                        .show()
+                    return@OnClickListener
+                }
+                viewModel.deletePocket(pockets[position].id)
+                viewModel.getHomeInfo(pockets[position].product.id)
+            })
+            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ ->
+                dialog.cancel()
+            })
+            .create().show()
     }
 
     private fun showEmptyDataHandling() {

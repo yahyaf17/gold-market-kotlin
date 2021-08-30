@@ -2,6 +2,7 @@ package com.mandiri.goldmarket.presentation.maintab.home.pocket
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -27,6 +28,10 @@ class NewPocketDialog: DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
+            val sharedPrefInit = requireParentFragment().requireContext()
+                .getSharedPreferences("CREDENTIALS", Context.MODE_PRIVATE)
+            val sharedPref = CustomSharedPreferences(sharedPrefInit)
+            val customerId = sharedPref.retrieveValue(CustomSharedPreferences.Key.CUSTOMER_ID)
             builder.setView(inflater.inflate(R.layout.new_pocket_dialog, null).apply {
                 val products = viewModel.value.productsLiveData.value!!
                 val productNameList: List<String> = products.map { p -> p.productName }
@@ -45,7 +50,7 @@ class NewPocketDialog: DialogFragment() {
                         viewModel.value.apply {
                             createNewPocket(
                                 pocketNameText.text.toString(),
-                                pocketSelectedLiveData.value?.customer!!.id,
+                                customerId!!,
                                 productSelected.id)
                             getHomeInfo(productSelected.id)
                         }

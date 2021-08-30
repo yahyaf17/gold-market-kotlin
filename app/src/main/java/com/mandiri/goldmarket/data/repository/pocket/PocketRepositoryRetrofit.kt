@@ -2,10 +2,12 @@ package com.mandiri.goldmarket.data.repository.pocket
 
 import android.util.Log
 import com.mandiri.goldmarket.data.remote.api.PocketApi
+import com.mandiri.goldmarket.data.remote.request.pocket.EditPocketRequest
 import com.mandiri.goldmarket.data.remote.request.pocket.PocketRequest
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
 import com.mandiri.goldmarket.utils.CustomSharedPreferences
 import kotlinx.coroutines.withTimeout
+import okhttp3.Response
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -79,6 +81,41 @@ class PocketRepositoryRetrofit @Inject constructor(private val pocketApi: Pocket
         } catch (e: Exception) {
             Log.d("PocketRepo", "customerPocketsFailed: ${e.localizedMessage}")
             null
+        }
+    }
+
+    override suspend fun editPocketName(request: EditPocketRequest): PocketResponse? {
+        return try {
+            withTimeout(20000) {
+                val response = pocketApi.editPocketName(request)
+                if (response.isSuccessful) {
+                    Log.d("PocketRepo", "changePocket: ${response.body()}")
+                    response.body()
+                } else {
+                    Log.d("PocketRepo", "editPocketName: TIMEOUT ")
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("PocketRepo", "changePocketFailed: ${e.localizedMessage}")
+            null
+        }
+    }
+
+    override suspend fun deletePocket(pocketId: String): Int {
+        return try {
+            withTimeout(20000) {
+                val response = pocketApi.deletePocket(pocketId)
+                if (response.isSuccessful) {
+                    Log.d("PocketRepo", "deletePocket: Success ${response.code()}")
+                    response.code()
+                } else {
+                    Log.d("PocketRepo", "deletePocket: TIMEOUT ${response.code()}")
+                    response.code()
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("PocketRepo", "deletePocketFailed: ${e.localizedMessage} ")
         }
     }
 

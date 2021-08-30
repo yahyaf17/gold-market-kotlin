@@ -47,4 +47,5 @@
     <string name="gold">Gold</string>
     <string name="silver">Silver</string>
     <string name="platinum">Platinum</string>
+    <string name="edit_pocket_name">Edit Pocket Name</string>
 </resources>

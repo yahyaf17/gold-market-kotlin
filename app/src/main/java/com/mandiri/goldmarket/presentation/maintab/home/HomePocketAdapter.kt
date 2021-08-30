@@ -1,6 +1,7 @@
 package com.mandiri.goldmarket.presentation.maintab.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mandiri.goldmarket.data.remote.response.pocket.PocketResponse
@@ -18,9 +19,17 @@ class HomePocketAdapter(private val onClickListener: OnClickItem): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: HomePocketViewHolder, position: Int) {
-        holder.binding.pocket = pockets[position]
-        holder.binding.cardPocket.setOnClickListener {
-            onClickListener.onChangePocket(position)
+        holder.binding.apply {
+            pocket = pockets[position]
+            cardPocket.setOnClickListener {
+                onClickListener.onChangePocket(position)
+            }
+            btnEditPocket.setOnClickListener {
+                onClickListener.onEditPocket(position)
+            }
+            btnDelete.setOnClickListener {
+                onClickListener.onDeletePocket(position)
+            }
         }
     }
 
@@ -38,6 +47,8 @@ class HomePocketAdapter(private val onClickListener: OnClickItem): RecyclerView.
 
     interface OnClickItem {
         fun onChangePocket(position: Int)
+        fun onEditPocket(position: Int)
+        fun onDeletePocket(position: Int)
     }
 
 }
